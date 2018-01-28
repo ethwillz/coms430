@@ -1,0 +1,51 @@
+In the example below, B can still fail with an NPE (or other internal
+corruption of the ArrayList object).  For example, 
+the memory operations involved in:
+
+  1) allocate memory for a new Widget
+  2) store a reference in variable w
+  3) run the Widget <init> method, which initializes variable 'arr'
+
+can be reordered, so in the end B can see a non-null reference to a Widget
+that does not appear to be completely constructed.  This is an example of
+inconsistent visibility: B sees an up-to-date value for w, but not for the 
+field arr.
+
+The issue is that the Widget constructed by A needs to be safely published to
+B, by setting up a happens-before sequence.  (In this example, it would be sufficient
+to declare w to be volatile.)
+
+Note that adding synchronization to the constructor body does not solve the
+problem, and in general it doesn't make sense to synchronize a constructor.
+E.g. item (2) above could still occur before item (3), allowing B to get 
+the synchronization lock in addItem before the constructor body executes.
+
+In any case, it is best to think of the problems of thread safety and safe publication 
+as logically distinct issues.
+
+public class Widget
+{
+  private ArrayList<String> arr;
+  
+  public Widget()
+  {
+    arr = new ArrayList<>();
+  }
+  
+  public synchronized void addItem(String s) { arr.add(s); }
+}
+
+Assume that w is a variable shared between threads A and B, e.g.
+
+Widget w;
+
+Thread A
+--------
+w = new Widget();
+
+Thread B
+--------
+if (w != null)
+{
+  w.addItem("Hello");
+}

@@ -9,7 +9,7 @@ public class Incrementer
   private static final int length = 100;
   private static final int numberOfThreads = 100;
   private static final int numberOfOperations = 10000;
-  
+
   private int[] theArray;
   private Thread[] threads = new Thread[numberOfThreads];
 
@@ -18,30 +18,30 @@ public class Incrementer
     Incrementer i = new Incrementer();
     i.go();
   }
-  
+
   public Incrementer()
   {
   }
-  
+
   public void go()
   {
     theArray = new int[length];
-    
+
     // Create a bunch of incrementor threads
     int numberOfIterations = numberOfOperations / numberOfThreads;
     for (int i = 0; i < numberOfThreads; ++i)
     {
       threads[i] = new IncrementWorker(numberOfIterations, this);
     }
-    
+
     // Crude attempt to make sure all worker threads are started
     // more or less at once (this would be better done using
     // java.util.concurrent.CountDownLatch)
     Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
-    
+
     System.out.println("Starting " + numberOfThreads + " threads to increment all elements of a " +
         length + " element array " + numberOfIterations + " times");
-    
+
     long startTime = System.currentTimeMillis();
     for (int i = 0; i < numberOfThreads; ++i)
     {
@@ -49,7 +49,6 @@ public class Incrementer
     }
 
     // Crude mechanism to wait for everyone to finish
-    // (this would be better done using java.util.concurrent.CountDownLatch)
     for (int i = 0; i < numberOfThreads; ++i)
     {
       try
@@ -61,9 +60,9 @@ public class Incrementer
         // shouldn't happen
       }
     }
-    
+
     long elapsed = System.currentTimeMillis() - startTime;
-    
+
     // Examine array contents
     int expected = numberOfOperations;
     int count = 0;
@@ -76,7 +75,7 @@ public class Incrementer
       }
     }
     System.out.println("There were " + count + " cells not containing " + expected);
-    
+
     System.out.println("Time: " + elapsed);
 
   }
@@ -103,13 +102,13 @@ public class Incrementer
   {
     private int iterations;
     private Incrementer incrementer;
-    
+
     public IncrementWorker(int iterations, Incrementer incrementer)
     {
       this.iterations = iterations;
       this.incrementer = incrementer;
     }
-    
+
     public void run()
     {
       for (int i = 0; i < iterations; ++i)
@@ -118,7 +117,7 @@ public class Incrementer
         //yield();
       }
     }
-    
+
     private /*synchronized*/ void doIncrement()
     {
       incrementer.incrementArray();
@@ -126,4 +125,3 @@ public class Incrementer
   }
 
 }
-
