@@ -1,6 +1,4 @@
-package hw1.two;
-
-import java.util.concurrent.atomic.AtomicInteger;
+package hw1.b;
 
 /**
  * CHANGES:
@@ -9,26 +7,26 @@ import java.util.concurrent.atomic.AtomicInteger;
  * NOTES:
  * Does count need to be edited on same lock since it can be edited by multiple RTs?
  */
-public class NoVisibility2Corrected {
+public class NoVisibility2 {
     private int number;
     private volatile int count;
     private final int ITERATIONS = 10000;
 
     public static void main(String[] args)
     {
-        NoVisibility2Corrected nv = new NoVisibility2Corrected();
+        NoVisibility2 nv = new NoVisibility2();
         nv.go();
     }
 
     private void go()
     {
-        new NoVisibility2Corrected.ReaderThread().start();
+        new NoVisibility2.ReaderThread().start();
 
         System.out.println("Main.java thread starting loop");
 
         for (int i = 0; i <= ITERATIONS; ++i)
         {
-            synchronized(NoVisibility2Corrected.this)
+            synchronized(NoVisibility2.this) //Locked on encapsulating NoVisibility2 instance
             {
                 number = i;
             }
@@ -44,7 +42,7 @@ public class NoVisibility2Corrected {
             while (true)
             {
                 count++;
-                synchronized(NoVisibility2Corrected.this)
+                synchronized(NoVisibility2.this) //Locked on encapsulating NoVisibility2 instance
                 {
                     if (number >= ITERATIONS) break;
                 }

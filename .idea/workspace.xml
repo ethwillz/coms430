@@ -2,38 +2,21 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d3c6b6fd-d543-47cf-8e4d-0d669bf23863" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/hw1/one/ChessGameStateCorrected.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/hw1/three/ImmutableTrajectoryCorrected.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/hw1/two/NoVisibility2Corrected.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/coms430.iml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/hw1/ChessGameStateCorrected.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/hw1/Main.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/threads_example_code/FirstSwingExample.java" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/hw1/ChessGameState.java" afterPath="$PROJECT_DIR$/src/hw1/one/ChessGameState.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/hw1/CircularQueue.java" afterPath="$PROJECT_DIR$/src/hw1/four/CircularQueue.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/hw1/Client.java" afterPath="$PROJECT_DIR$/src/hw1/five/Client.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/hw1/Escape.java.txt" afterPath="$PROJECT_DIR$/src/threads_example_code/Escape.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/hw1/FakeDatabase.java" afterPath="$PROJECT_DIR$/src/hw1/five/FakeDatabase.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/hw1/ImmutableTrajectory.java" afterPath="$PROJECT_DIR$/src/hw1/three/ImmutableTrajectory.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/hw1/NoSuchEntryException.java" afterPath="$PROJECT_DIR$/src/hw1/five/NoSuchEntryException.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/hw1/NoVisibility2.java" afterPath="$PROJECT_DIR$/src/hw1/two/NoVisibility2.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/hw1/SimpleServer.java" afterPath="$PROJECT_DIR$/src/hw1/five/SimpleServer.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/hw1/hw1.pdf" afterPath="$PROJECT_DIR$/src/hw1/hw1.pdf" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/threads_example_code/COWPoint.java" afterPath="$PROJECT_DIR$/src/threads_example_code/COWPoint.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/threads_example_code/Foo.java" afterPath="$PROJECT_DIR$/src/threads_example_code/Foo.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/threads_example_code/FooContinued.java" afterPath="$PROJECT_DIR$/src/threads_example_code/FooContinued.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/threads_example_code/HelloWorld.java" afterPath="$PROJECT_DIR$/src/threads_example_code/HelloWorld.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/threads_example_code/Immutability.java" afterPath="$PROJECT_DIR$/src/threads_example_code/Immutability.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/threads_example_code/Incrementer.java" afterPath="$PROJECT_DIR$/src/threads_example_code/Incrementer.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/threads_example_code/NoVisibility.java" afterPath="$PROJECT_DIR$/src/threads_example_code/NoVisibility.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/threads_example_code/Rectangle.java" afterPath="$PROJECT_DIR$/src/threads_example_code/Rectangle.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/threads_example_code/SetCheck.java" afterPath="$PROJECT_DIR$/src/threads_example_code/SetCheck.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/threads_example_code/widget.txt" afterPath="$PROJECT_DIR$/src/threads_example_code/widget.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/hw0/Point.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/hw1/one/ChessGameState.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/hw1/three/ImmutableTrajectory.java" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/hw1/two/NoVisibility2.java" afterPath="" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/hw1/five/Client.java" afterPath="$PROJECT_DIR$/src/hw1/e/Client.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/hw1/five/FakeDatabase.java" afterPath="$PROJECT_DIR$/src/hw1/e/FakeDatabase.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/hw1/five/NoSuchEntryException.java" afterPath="$PROJECT_DIR$/src/hw1/e/NoSuchEntryException.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/hw1/five/SimpleServer.java" afterPath="$PROJECT_DIR$/src/hw1/e/SimpleServer.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/hw1/four/CircularQueue.java" afterPath="$PROJECT_DIR$/src/hw1/d/CircularQueue.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/hw1/one/ChessGameStateCorrected.java" afterPath="$PROJECT_DIR$/src/hw1/a/ChessGameState.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/hw1/three/ImmutableTrajectoryCorrected.java" afterPath="$PROJECT_DIR$/src/hw1/c/ImmutableTrajectory.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/hw1/two/NoVisibility2Corrected.java" afterPath="$PROJECT_DIR$/src/hw1/b/NoVisibility2.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/threads_example_code/HelloWorld.java" afterPath="$PROJECT_DIR$/src/threads_example_code/HelloWorld.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/threads_example_code/Rectangle.java" afterPath="$PROJECT_DIR$/src/threads_example_code/Rectangle.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -45,44 +28,42 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="ChessGameStateCorrected.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/hw1/one/ChessGameStateCorrected.java">
+      <file leaf-file-name="ChessGameState.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/hw1/a/ChessGameState.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="468">
-              <caret line="43" column="47" lean-forward="false" selection-start-line="43" selection-start-column="47" selection-end-line="43" selection-end-column="47" />
+            <state relative-caret-position="165">
+              <caret line="11" column="25" lean-forward="false" selection-start-line="11" selection-start-column="25" selection-end-line="11" selection-end-column="25" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="NoVisibility2Corrected.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/hw1/two/NoVisibility2Corrected.java">
+      <file leaf-file-name="NoVisibility2.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/hw1/b/NoVisibility2.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-3">
-              <caret line="15" column="0" lean-forward="true" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
+            <state relative-caret-position="488">
+              <caret line="44" column="97" lean-forward="false" selection-start-line="44" selection-start-column="97" selection-end-line="44" selection-end-column="97" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ImmutableTrajectoryCorrected.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/hw1/three/ImmutableTrajectoryCorrected.java">
+      <file leaf-file-name="ImmutableTrajectory.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/hw1/c/ImmutableTrajectory.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="240">
-              <caret line="19" column="5" lean-forward="true" selection-start-line="19" selection-start-column="5" selection-end-line="19" selection-end-column="5" />
+            <state relative-caret-position="210">
+              <caret line="14" column="31" lean-forward="false" selection-start-line="14" selection-start-column="31" selection-end-line="14" selection-end-column="31" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#421#422#0" expanded="true" />
-                <element signature="e#485#486#0" expanded="true" />
-                <element signature="e#529#530#0" expanded="true" />
-                <element signature="e#591#592#0" expanded="true" />
+                <element signature="e#399#400#0" expanded="true" />
+                <element signature="e#489#490#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file leaf-file-name="CircularQueue.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/hw1/four/CircularQueue.java">
+        <entry file="file://$PROJECT_DIR$/src/hw1/d/CircularQueue.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="60">
               <caret line="4" column="3" lean-forward="false" selection-start-line="4" selection-start-column="3" selection-end-line="4" selection-end-column="3" />
@@ -133,6 +114,10 @@
         <option value="$PROJECT_DIR$/src/hw1/two/NoVisibility2Corrected.java" />
         <option value="$PROJECT_DIR$/src/hw1/four/CircularQueue.java" />
         <option value="$PROJECT_DIR$/src/hw1/three/ImmutableTrajectoryCorrected.java" />
+        <option value="$PROJECT_DIR$/src/hw1/three/ImmutableTrajectory.java" />
+        <option value="$PROJECT_DIR$/src/hw1/two/NoVisibility2.java" />
+        <option value="$PROJECT_DIR$/src/hw1/one/ChessGameState.java" />
+        <option value="$PROJECT_DIR$/src/hw1/a/ChessGameState.java" />
       </list>
     </option>
   </component>
@@ -181,13 +166,6 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="hw1" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="coms430" type="b2602c69:ProjectViewProjectNode" />
-              <item name="coms430" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="hw1" type="462c0819:PsiDirectoryNode" />
-              <item name="two" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
@@ -208,8 +186,8 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src/hw1" />
       <recent name="$PROJECT_DIR$/src" />
+      <recent name="$PROJECT_DIR$/src/hw1" />
       <recent name="$PROJECT_DIR$/threads_example_code" />
     </key>
   </component>
@@ -248,11 +226,11 @@
     <configuration name="NoVisibility2" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
-          <option name="PATTERN" value="hw1.two.*" />
+          <option name="PATTERN" value="hw1.b.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="MAIN_CLASS_NAME" value="hw1.two.NoVisibility2" />
+      <option name="MAIN_CLASS_NAME" value="hw1.b.NoVisibility2" />
       <option name="VM_PARAMETERS" />
       <option name="PROGRAM_PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
@@ -264,14 +242,14 @@
       <module name="coms430" />
       <envs />
     </configuration>
-    <configuration name="NoVisibility2Corrected" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+    <configuration name="NoVisibility2" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
-          <option name="PATTERN" value="hw1.two.*" />
+          <option name="PATTERN" value="hw1.b.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="MAIN_CLASS_NAME" value="hw1.two.NoVisibility2Corrected" />
+      <option name="MAIN_CLASS_NAME" value="hw1.b.NoVisibility2" />
       <option name="VM_PARAMETERS" />
       <option name="PROGRAM_PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
@@ -390,16 +368,15 @@
       <workItem from="1517171478349" duration="6300000" />
       <workItem from="1517187290003" duration="266000" />
       <workItem from="1517349877556" duration="2449000" />
-      <workItem from="1517418579697" duration="340000" />
+      <workItem from="1517418579697" duration="1052000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="9355000" />
+    <option name="totallyTimeSpent" value="10067000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="825" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -413,8 +390,9 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17525035" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17525035" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32876712" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -427,7 +405,6 @@
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32876712" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32876712" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -438,19 +415,12 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/hw1/one/ChessGameState.java</url>
-          <line>17</line>
-          <properties />
-        </line-breakpoint>
-      </breakpoints>
       <option name="time" value="1" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/hw1/one/ChessGameStateCorrected.java">
+    <entry file="file://$PROJECT_DIR$/src/hw1/a/ChessGameState.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -458,21 +428,19 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/hw1/three/ImmutableTrajectoryCorrected.java">
+    <entry file="file://$PROJECT_DIR$/src/hw1/c/ImmutableTrajectory.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="150">
           <caret line="10" column="67" lean-forward="false" selection-start-line="10" selection-start-column="67" selection-end-line="10" selection-end-column="67" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#421#422#0" expanded="true" />
-            <element signature="e#485#486#0" expanded="true" />
-            <element signature="e#529#530#0" expanded="true" />
-            <element signature="e#591#592#0" expanded="true" />
+            <element signature="e#399#400#0" expanded="true" />
+            <element signature="e#489#490#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/hw1/two/NoVisibility2Corrected.java">
+    <entry file="file://$PROJECT_DIR$/src/hw1/b/NoVisibility2.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="135">
           <caret line="9" column="84" lean-forward="false" selection-start-line="9" selection-start-column="84" selection-end-line="9" selection-end-column="84" />
@@ -480,7 +448,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/hw1/four/CircularQueue.java">
+    <entry file="file://$PROJECT_DIR$/src/hw1/d/CircularQueue.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
           <caret line="4" column="3" lean-forward="true" selection-start-line="4" selection-start-column="3" selection-end-line="4" selection-end-column="3" />
@@ -488,7 +456,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/hw1/one/ChessGameStateCorrected.java">
+    <entry file="file://$PROJECT_DIR$/src/hw1/a/ChessGameState.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="225">
           <caret line="15" column="55" lean-forward="false" selection-start-line="15" selection-start-column="55" selection-end-line="15" selection-end-column="55" />
@@ -496,21 +464,19 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/hw1/three/ImmutableTrajectoryCorrected.java">
+    <entry file="file://$PROJECT_DIR$/src/hw1/c/ImmutableTrajectory.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
           <caret line="12" column="13" lean-forward="false" selection-start-line="12" selection-start-column="13" selection-end-line="12" selection-end-column="13" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#421#422#0" expanded="true" />
-            <element signature="e#485#486#0" expanded="true" />
-            <element signature="e#529#530#0" expanded="true" />
-            <element signature="e#591#592#0" expanded="true" />
+            <element signature="e#399#400#0" expanded="true" />
+            <element signature="e#489#490#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/hw1/two/NoVisibility2Corrected.java">
+    <entry file="file://$PROJECT_DIR$/src/hw1/b/NoVisibility2.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="480">
           <caret line="32" column="13" lean-forward="true" selection-start-line="32" selection-start-column="13" selection-end-line="32" selection-end-column="13" />
@@ -518,7 +484,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/hw1/one/ChessGameStateCorrected.java">
+    <entry file="file://$PROJECT_DIR$/src/hw1/a/ChessGameState.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -533,28 +499,28 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/hw1/five/FakeDatabase.java">
+    <entry file="file://$PROJECT_DIR$/src/hw1/e/FakeDatabase.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="15">
           <caret line="10" column="13" lean-forward="false" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/hw1/five/Client.java">
+    <entry file="file://$PROJECT_DIR$/src/hw1/e/Client.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="15">
           <caret line="10" column="13" lean-forward="false" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/hw1/five/SimpleServer.java">
+    <entry file="file://$PROJECT_DIR$/src/hw1/e/SimpleServer.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1335">
           <caret line="96" column="56" lean-forward="true" selection-start-line="96" selection-start-column="56" selection-end-line="96" selection-end-column="56" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/hw1/five/NoSuchEntryException.java">
+    <entry file="file://$PROJECT_DIR$/src/hw1/e/NoSuchEntryException.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="30">
           <caret line="2" column="13" lean-forward="false" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
@@ -575,7 +541,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/hw1/one/ChessGameState.java">
+    <entry file="file://$PROJECT_DIR$/src/hw1/a/ChessGameState.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
           <caret line="19" column="38" lean-forward="true" selection-start-line="19" selection-start-column="38" selection-end-line="19" selection-end-column="38" />
@@ -597,18 +563,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/hw1/three/ImmutableTrajectory.java">
+    <entry file="file://$PROJECT_DIR$/src/hw1/c/ImmutableTrajectory.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="120">
           <caret line="8" column="42" lean-forward="true" selection-start-line="8" selection-start-column="42" selection-end-line="8" selection-end-column="42" />
-          <folding>
-            <element signature="e#155#156#0" expanded="false" />
-            <element signature="e#181#182#0" expanded="false" />
-            <element signature="e#217#218#0" expanded="false" />
-            <element signature="e#238#239#0" expanded="false" />
-            <element signature="e#280#281#0" expanded="false" />
-            <element signature="e#308#309#0" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -621,7 +580,7 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/hw1/four/CircularQueueCorrected.java" />
-    <entry file="file://$PROJECT_DIR$/src/hw1/two/NoVisibility2.java">
+    <entry file="file://$PROJECT_DIR$/src/hw1/b/NoVisibility2.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="510">
           <caret line="34" column="3" lean-forward="true" selection-start-line="34" selection-start-column="3" selection-end-line="34" selection-end-column="3" />
@@ -629,7 +588,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/hw1/four/CircularQueue.java">
+    <entry file="file://$PROJECT_DIR$/src/hw1/d/CircularQueue.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
           <caret line="4" column="3" lean-forward="false" selection-start-line="4" selection-start-column="3" selection-end-line="4" selection-end-column="3" />
@@ -637,32 +596,38 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/hw1/one/ChessGameStateCorrected.java">
+    <entry file="file://$PROJECT_DIR$/src/hw1/c/ImmutableTrajectory.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="468">
-          <caret line="43" column="47" lean-forward="false" selection-start-line="43" selection-start-column="47" selection-end-line="43" selection-end-column="47" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/hw1/three/ImmutableTrajectoryCorrected.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="19" column="5" lean-forward="true" selection-start-line="19" selection-start-column="5" selection-end-line="19" selection-end-column="5" />
+        <state relative-caret-position="210">
+          <caret line="14" column="31" lean-forward="false" selection-start-line="14" selection-start-column="31" selection-end-line="14" selection-end-column="31" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#421#422#0" expanded="true" />
-            <element signature="e#485#486#0" expanded="true" />
-            <element signature="e#529#530#0" expanded="true" />
-            <element signature="e#591#592#0" expanded="true" />
+            <element signature="e#399#400#0" expanded="true" />
+            <element signature="e#489#490#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/hw1/two/NoVisibility2Corrected.java">
+    <entry file="file://$PROJECT_DIR$/src/hw1/b/NoVisibility2.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-3">
-          <caret line="15" column="0" lean-forward="true" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
+        <state relative-caret-position="488">
+          <caret line="44" column="97" lean-forward="false" selection-start-line="44" selection-start-column="97" selection-end-line="44" selection-end-column="97" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/hw1/og_code/ChessGameState.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" column="13" lean-forward="false" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/hw1/a/ChessGameState.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="11" column="25" lean-forward="false" selection-start-line="11" selection-start-column="25" selection-end-line="11" selection-end-column="25" />
           <folding />
         </state>
       </provider>

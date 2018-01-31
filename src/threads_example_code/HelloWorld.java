@@ -1,12 +1,12 @@
 package threads_example_code;
 /**
- * Simple program with hw1.two independent threads.
+ * Simple program with hw1.b independent threads.
  */
 public class HelloWorld
 {
 
   /**
-   * Starts hw1.two threads.
+   * Starts hw1.b threads.
    * @param args
    *     ignored
    */

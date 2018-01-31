@@ -1,4 +1,4 @@
-package hw1.four;
+package hw1.d;
 
 import java.util.NoSuchElementException;
 
@@ -6,16 +6,16 @@ import java.util.NoSuchElementException;
  * A standard singly-linked circular FIFO queue with tail pointer.
  * For an empty queue, the tail pointer is null; for a nonempty
  * queue, the head of the queue is tail.next.  (When the queue has 
- * hw1.four.one element, tail.next points to tail.)
+ * hw1.d.a element, tail.next points to tail.)
  *
  * 4a.
- * One possible interleaving of instructions assuming RUle 2 isn't taken into account is if two threads try and add to
+ * One possible interleaving of instructions assuming RUle 2 isn't taken into account is if b threads try and add to
  * the queue simultaneously. The first thread could see tail is null and then experiences a context switch to where the
  * second thread also sees tail to be null. Which value will become the only element in the queue is dependent on which
  * thrad finishes last.
  *
  * 4b.
- * If one thread adds to the queue which should update the tail. Then another thread may come along and try and remove
+ * If a thread adds to the queue which should update the tail. Then another thread may come along and try and remove
  * from the list, which should be a valid operation throwing no exceptions. If the data for tail is null, an exception
  * may be thrown regardless since the second thread isn't aware of tail's assignment by the other thread.
  */

@@ -1,4 +1,4 @@
-package hw1.three;
+package hw1.c;
 
 import java.awt.*;
 import java.util.Arrays;
@@ -10,23 +10,23 @@ import java.util.Arrays;
  *
  * NOTES:
  */
-public class ImmutableTrajectoryCorrected
+public class ImmutableTrajectory
 {
     private final Point[] data;
 
-    public ImmutableTrajectoryCorrected(Point[] data)
+    public ImmutableTrajectory(Point[] data)
     {
         this.data = data;
     }
 
     public Point[] getValues()
     {
-        return Arrays.stream(data).toArray(Point[]::new);
+        return Arrays.stream(data).toArray(Point[]::new); //Makes deep copy of data
     }
 
     public Point getValue(int index)
     {
-        return new Point(data[index].x, data[index].y);
+        return new Point(data[index].x, data[index].y); //Makes deep copy of point reference
     }
 
 }

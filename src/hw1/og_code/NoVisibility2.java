@@ -1,4 +1,4 @@
-package hw1.two;
+package hw1;
 
 /**
  * TODO: Put your response here.
@@ -19,7 +19,7 @@ public class NoVisibility2
   {
     new ReaderThread().start();
     
-    System.out.println("Main.java thread starting loop");
+    System.out.println("Main thread starting loop");
 
     for (int i = 0; i <= ITERATIONS; ++i)
     {

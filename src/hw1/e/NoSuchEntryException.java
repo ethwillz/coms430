@@ -1,4 +1,4 @@
-package hw1.five;
+package hw1.e;
 
 public class NoSuchEntryException extends Exception
 {

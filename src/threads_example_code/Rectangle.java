@@ -3,7 +3,7 @@ package threads_example_code;
 /**
  * A class that violates the "second" aspect of Rule 1.  Even though the same intrinsic lock
  * is acquired for all data access, the getArea method may return an incorrect
- * value since the lock is not held for the duration of the hw1.two accesses to width and
+ * value since the lock is not held for the duration of the hw1.b accesses to width and
  * height.
  */
 public class Rectangle

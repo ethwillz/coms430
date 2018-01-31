@@ -1,11 +1,10 @@
-package hw1.three;
+package hw1;
 
 import java.awt.Point;
 
 public class ImmutableTrajectory
 {
   private final Point[] data;
-
   public ImmutableTrajectory(Point[] data)
   {
     this.data = data;

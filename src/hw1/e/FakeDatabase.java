@@ -1,4 +1,4 @@
-package hw1.five;
+package hw1.e;
 
 import java.util.Random;
 

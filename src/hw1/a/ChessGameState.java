@@ -1,4 +1,4 @@
-package hw1.one;
+package hw1.a;
 
 /**
  * State class for a chess game. Outside classes will read and update this state
@@ -9,16 +9,14 @@ package hw1.one;
  *      Update makes copy of start and end pairs instead of copying ref
  *
  * NOTES:
- * Do we actually need to make deep copies of Pair objects?
- * Does an AtomicBoolean actually increase performance?
- * Could check for valid piece at start on update call
+ * Would an AtomicBoolean increase performance?
  */
-public class ChessGameStateCorrected {
+public class ChessGameState {
     private boolean whoseTurn; // 0 for black, 1 for white. Default false
     private Piece board[][];  // Current board state.
     private volatile Pair<Pair<Integer>> lastMove;  // Last move made.
 
-    public ChessGameStateCorrected() {
+    public ChessGameState() {
         board = new Piece[8][8];
     }
 
@@ -28,7 +26,7 @@ public class ChessGameStateCorrected {
         whoseTurn = !whoseTurn;
         Pair<Integer> startCopy = new Pair<>(start.x, start.y);
         Pair<Integer> endCopy = new Pair<>(end.x, end.y);
-        lastMove = new Pair<>(startCopy, endCopy);
+        lastMove = new Pair<>(startCopy, endCopy); //New identical instance to avoid incorporating reference
     }
 
     public synchronized boolean getWhoseTurn() {
@@ -39,10 +37,10 @@ public class ChessGameStateCorrected {
         return board;
     }
 
-    public Pair<Pair<Integer>> getLastMove() {
+    public synchronized Pair<Pair<Integer>> getLastMove() {
         Pair<Integer> lastMoveStart = new Pair<>(lastMove.x.x, lastMove.x.y);
         Pair<Integer> lastMoveEnd = new Pair<>(lastMove.y.x, lastMove.y.y);
-        return new Pair<>(lastMoveStart, lastMoveEnd);
+        return new Pair<>(lastMoveStart, lastMoveEnd); //New identical instance to avoid publishing reference
     }
 
     public enum Piece {

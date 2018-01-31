@@ -1,4 +1,4 @@
-package hw1.five;
+package hw1.e;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -181,7 +181,7 @@ public class Client
   }
   
   /**
-   * Displays hw1.four.one key/value pair.
+   * Displays hw1.d.a key/value pair.
    * @param key
    * @param value
    */

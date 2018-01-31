@@ -1,15 +1,17 @@
-package hw1.five;
+package hw1;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * A simple example of a server.  This server accepts
  * connections on port 2222, reads a key from the
- * input stream, and returns the hw1.five.FakeDatabase record
+ * input stream, and returns the FakeDatabase record
  * matching that key.
  */
 public class SimpleServer
@@ -17,7 +19,7 @@ public class SimpleServer
    
   public static void main(String[] args)
   {
-    new SimpleServer().runServer(2222);
+    new SimpleServer().runServer(2222);    
   }
 
   /**

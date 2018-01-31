@@ -1,4 +1,4 @@
-package hw1.one;
+package hw1;
 
 /**
  * State class for a chess game. Outside classes will read and update this state
@@ -17,7 +17,7 @@ public class ChessGameState {
     board[end.x][end.y] = board[start.x][start.y];
     board[start.x][start.y] = Piece.NONE;
     whoseTurn = !whoseTurn;
-    lastMove = new Pair<>(start, end);
+    lastMove = new Pair<Pair<Integer>>(start, end);
   }
 
   public synchronized boolean getWhoseTurn() {
@@ -32,7 +32,7 @@ public class ChessGameState {
     return lastMove;
   }
   
-  public enum Piece {
+  public static enum Piece {
     NONE, ROOK, KNIGHT, BISHOP, KING, QUEEN, PAWN;
   }
   
