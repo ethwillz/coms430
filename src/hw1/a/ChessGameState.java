@@ -4,17 +4,14 @@ package hw1.a;
  * State class for a chess game. Outside classes will read and update this state
  * as the game progresses.
  *
- * CHANGE LIST:
- * 1/28 Getting last move makes deep copy of pair object to return
- *      Update makes copy of start and end pairs instead of copying ref
- *
- * NOTES:
- * Would an AtomicBoolean increase performance?
+ * I changed the API to return one deep copy of ChessGameStateObject instead of having an access method for each
+ * state variable. This prevents a thread from getting an inconsistent game state constructed out of several sequential
+ * API calls to get state which could be interrupted by correctly-timed context switches.
  */
 public class ChessGameState {
     private boolean whoseTurn; // 0 for black, 1 for white. Default false
     private Piece board[][];  // Current board state.
-    private volatile Pair<Pair<Integer>> lastMove;  // Last move made.
+    private Pair<Pair<Integer>> lastMove;  // Last move made.
 
     public ChessGameState() {
         board = new Piece[8][8];
@@ -24,23 +21,25 @@ public class ChessGameState {
         board[end.x][end.y] = board[start.x][start.y];
         board[start.x][start.y] = Piece.NONE;
         whoseTurn = !whoseTurn;
-        Pair<Integer> startCopy = new Pair<>(start.x, start.y);
-        Pair<Integer> endCopy = new Pair<>(end.x, end.y);
-        lastMove = new Pair<>(startCopy, endCopy); //New identical instance to avoid incorporating reference
+        lastMove = new Pair<>(start, end);
     }
 
-    public synchronized boolean getWhoseTurn() {
-        return whoseTurn;
+    private Piece[][] getBoard() {
+        Piece[][] copy = new Piece[8][8];
+        for(int i = 0; i < 8; i++){
+            for(int j = 0; j < 8; j++){
+                copy[i][j] = board[i][j];
+            }
+        }
+        return copy;
     }
 
-    public synchronized Piece[][] getBoard() {
-        return board;
-    }
-
-    public synchronized Pair<Pair<Integer>> getLastMove() {
-        Pair<Integer> lastMoveStart = new Pair<>(lastMove.x.x, lastMove.x.y);
-        Pair<Integer> lastMoveEnd = new Pair<>(lastMove.y.x, lastMove.y.y);
-        return new Pair<>(lastMoveStart, lastMoveEnd); //New identical instance to avoid publishing reference
+    public synchronized ChessGameState getGameState(){
+        ChessGameState gs = new ChessGameState();
+        gs.whoseTurn = whoseTurn;
+        gs.board = getBoard();
+        gs.lastMove = lastMove;
+        return gs;
     }
 
     public enum Piece {

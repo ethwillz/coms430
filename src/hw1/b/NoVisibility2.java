@@ -54,7 +54,7 @@ public class NoVisibility2 {
         {
             System.out.println("Reader starting...");
             int result = get();
-            System.out.println("Reader sees number: " + result);
+            System.out.println("Reader sees number: " + result + " and count is: " + count);
         }
     }
 }
