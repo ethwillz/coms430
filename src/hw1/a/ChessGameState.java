@@ -3,14 +3,10 @@ package hw1.a;
 /**
  * State class for a chess game. Outside classes will read and update this state
  * as the game progresses.
- *
- * I changed the API to return one deep copy of ChessGameStateObject instead of having an access method for each
- * state variable. This prevents a thread from getting an inconsistent game state constructed out of several sequential
- * API calls to get state which could be interrupted by correctly-timed context switches.
  */
 public class ChessGameState {
-    private boolean whoseTurn; // 0 for black, 1 for white. Default false
-    private Piece board[][];  // Current board state.
+    private boolean whoseTurn; // 0 for black, 1 for white.
+    private Piece[][] board;  // Current board state.
     private Pair<Pair<Integer>> lastMove;  // Last move made.
 
     public ChessGameState() {
@@ -21,10 +17,14 @@ public class ChessGameState {
         board[end.x][end.y] = board[start.x][start.y];
         board[start.x][start.y] = Piece.NONE;
         whoseTurn = !whoseTurn;
-        lastMove = new Pair<>(start, end);
+        lastMove = new Pair<Pair<Integer>>(start, end);
     }
 
-    private Piece[][] getBoard() {
+    public synchronized boolean getWhoseTurn() {
+        return whoseTurn;
+    }
+
+    public synchronized Piece[][] getBoard() {
         Piece[][] copy = new Piece[8][8];
         for(int i = 0; i < 8; i++){
             for(int j = 0; j < 8; j++){
@@ -34,15 +34,11 @@ public class ChessGameState {
         return copy;
     }
 
-    public synchronized ChessGameState getGameState(){
-        ChessGameState gs = new ChessGameState();
-        gs.whoseTurn = whoseTurn;
-        gs.board = getBoard();
-        gs.lastMove = lastMove;
-        return gs;
+    public synchronized Pair<Pair<Integer>> getLastMove() {
+        return lastMove;
     }
 
-    public enum Piece {
+    public static enum Piece {
         NONE, ROOK, KNIGHT, BISHOP, KING, QUEEN, PAWN;
     }
 

@@ -1,4 +1,4 @@
-package hw1;
+package hw1.og_code;
 
 /**
  * State class for a chess game. Outside classes will read and update this state

@@ -1,11 +1,7 @@
 package hw1.b;
 
 /**
- * CHANGES:
- * 1/28 Changed locks on number to be on the enclosing object
- *
- * NOTES:
- * Does count need to be edited on same lock since it can be edited by multiple RTs?
+ * TODO NEED RESPONSE HERE
  */
 public class NoVisibility2 {
     private int number;

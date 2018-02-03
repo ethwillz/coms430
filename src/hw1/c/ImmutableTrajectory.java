@@ -1,15 +1,7 @@
 package hw1.c;
 
 import java.awt.*;
-import java.util.Arrays;
 
-/**
- * CHANGES:
- * 1/28 Made deep copy of Point[] for return of getValues
- *      Made deep copy of point when single index requested
- *
- * NOTES:
- */
 public class ImmutableTrajectory
 {
     private final Point[] data;
@@ -21,7 +13,11 @@ public class ImmutableTrajectory
 
     public Point[] getValues()
     {
-        return Arrays.stream(data).toArray(Point[]::new); //Makes deep copy of data
+        Point[] copy = new Point[data.length];
+        for(int i = 0; i < data.length; i++){
+            copy[i] = new Point(data[i].x, data[i].y);
+        }
+        return copy;
     }
 
     public Point getValue(int index)
