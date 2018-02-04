@@ -8,6 +8,13 @@ import java.util.Collections;
 import java.util.Scanner;
 
 
+/**
+ * The most obvious change is running a new thread in the doLookup method. The getValueFromDB method has a check to
+ * see if the key is in the cache, if it is not the key is added to the cache and it is sorted. This creates a race
+ * condition where a thread may have added to the list and experiences a context switch before the cache is sorted.
+ * To fix this I synchronized all access to the cache on the cache's intrinsic lock, which will ensure that the cache
+ * will stay sorted since only one thread can access its state at any given time.
+ */
 public class Client
 {
   public static final String HOST = "localhost";
@@ -125,8 +132,7 @@ public class Client
   private void getValueFromDB(int key)
   {
     Socket s = null;
-    try
-    {
+    try {
       // open a connection to the server
       s = new Socket(HOST, PORT);
 
@@ -134,17 +140,18 @@ public class Client
       PrintWriter pw = new PrintWriter(s.getOutputStream());
       pw.println("" + key);
       pw.flush();  // don't forget to flush...    
-      
+
       // read response, which we expect to be line-oriented text
       Scanner scanner = new Scanner(s.getInputStream());
       String value = scanner.nextLine();
       display(key, value);
 
-      // make sure it's in the local cache
-      if (getLocalValue(key) == null)
-      {
-        cache.add(new Record(key, value));
-        Collections.sort(cache);
+      synchronized (cache) {
+        // make sure it's in the local cache
+        if (getLocalValue(key) == null) {
+          cache.add(new Record(key, value));
+          Collections.sort(cache);
+        }
       }
     }
     catch (IOException e)
@@ -195,10 +202,11 @@ public class Client
    */
   private void displayAll()
   {
-    for (int i =  0; i < cache.size(); ++i)
-    {
-      Record r = cache.get(i);     
-      System.out.println(r.key() + " " + r.value());
+    synchronized(cache) {
+      for (int i = 0; i < cache.size(); ++i) {
+        Record r = cache.get(i);
+        System.out.println(r.key() + " " + r.value());
+      }
     }
   }
   
@@ -209,24 +217,20 @@ public class Client
    */
   private String getLocalValue(int key)
   {
-    // binary search, since the list is sorted
-    int start = 0;
-    int end = cache.size() - 1;
-    while (start <= end)
-    {
-      int mid = (start + end) / 2;
-      Record currentRecord = cache.get(mid);
-      if (key == currentRecord.key())
-      {
-        return currentRecord.value();
-      }
-      else if (key < currentRecord.key())
-      {
-        end = mid - 1;
-      }
-      else
-      {
-        start = mid + 1;
+    synchronized(cache){
+      // binary search, since the list is sorted
+      int start = 0;
+      int end = cache.size() - 1;
+      while (start <= end) {
+        int mid = (start + end) / 2;
+        Record currentRecord = cache.get(mid);
+        if (key == currentRecord.key()) {
+          return currentRecord.value();
+        } else if (key < currentRecord.key()) {
+          end = mid - 1;
+        } else {
+          start = mid + 1;
+        }
       }
     }
     
