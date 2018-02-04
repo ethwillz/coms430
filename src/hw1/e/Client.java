@@ -113,7 +113,7 @@ public class Client
     }
     else
     {
-      getValueFromDB(key);
+      new Thread(() -> getValueFromDB(key)).run();
     }   
   }
   

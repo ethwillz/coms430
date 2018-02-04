@@ -9,15 +9,13 @@ import java.util.NoSuchElementException;
  * hw1.d.a element, tail.next points to tail.)
  *
  * 4a.
- * One possible interleaving of instructions assuming RUle 2 isn't taken into account is if b threads try and add to
+ * One possible interleaving of instructions assuming rule 2 isn't taken into account is if 2 threads try and add to
  * the queue simultaneously. The first thread could see tail is null and then experiences a context switch to where the
  * second thread also sees tail to be null. Which value will become the only element in the queue is dependent on which
- * thrad finishes last.
+ * thread writes last.
  *
  * 4b.
- * If a thread adds to the queue which should update the tail. Then another thread may come along and try and remove
- * from the list, which should be a valid operation throwing no exceptions. If the data for tail is null, an exception
- * may be thrown regardless since the second thread isn't aware of tail's assignment by the other thread.
+ *
  */
 public class CircularQueue<T>
 {

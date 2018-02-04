@@ -1,7 +1,10 @@
 package hw1.b;
 
 /**
- * TODO NEED RESPONSE HERE
+ * This class violates rule 1 because number was being accessed in two methods with two different locks. Locking on this
+ * in the go method locks on the NoVisibility2 object whereas the get method on the reader thread is locked on the
+ * ReaderThread object. Locking it instead on NoVisibility.this locks on the encapsulating NoVisibility2 object which
+ * solves the rule 1 violation.
  */
 public class NoVisibility2 {
     private int number;
@@ -22,7 +25,7 @@ public class NoVisibility2 {
 
         for (int i = 0; i <= ITERATIONS; ++i)
         {
-            synchronized(NoVisibility2.this) //Locked on encapsulating NoVisibility2 instance
+            synchronized(this)
             {
                 number = i;
             }
