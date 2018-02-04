@@ -9,11 +9,11 @@ import java.util.Scanner;
 
 
 /**
- * The most obvious change is running a new thread in the doLookup method. The getValueFromDB method has a check to
- * see if the key is in the cache, if it is not the key is added to the cache and it is sorted. This creates a race
- * condition where a thread may have added to the list and experiences a context switch before the cache is sorted.
- * To fix this I synchronized all access to the cache on the cache's intrinsic lock, which will ensure that the cache
- * will stay sorted since only one thread can access its state at any given time.
+ * The most obvious change is running a new thread in the doLookup method. During the thread's execution, the getValueFromDB
+ * method has a check to see if the key is in the cache, if it is not the key is added to the cache and it is sorted.
+ * This creates a race condition where a thread may have added to the list and experiences a context switch before the
+ * cache is sorted. To fix this I synchronized all access to the cache on the cache's intrinsic lock, which will ensure
+ * that the cache will stay sorted since only one thread can access its state at any given time.
  */
 public class Client
 {
@@ -188,7 +188,7 @@ public class Client
   }
   
   /**
-   * Displays hw1.d.a key/value pair.
+   * Displays key/value pair.
    * @param key
    * @param value
    */
