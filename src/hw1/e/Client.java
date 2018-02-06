@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
 
-
 /**
  * The most obvious change is running a new thread in the doLookup method. During the thread's execution, the getValueFromDB
  * method has a check to see if the key is in the cache, if it is not the key is added to the cache and it is sorted.
@@ -146,7 +145,7 @@ public class Client
       String value = scanner.nextLine();
       display(key, value);
 
-      synchronized (cache) {
+      synchronized (cache) { //Locked on cache object
         // make sure it's in the local cache
         if (getLocalValue(key) == null) {
           cache.add(new Record(key, value));
@@ -202,11 +201,8 @@ public class Client
    */
   private void displayAll()
   {
-    synchronized(cache) {
-      for (int i = 0; i < cache.size(); ++i) {
-        Record r = cache.get(i);
-        System.out.println(r.key() + " " + r.value());
-      }
+    synchronized(cache) { //Locked on cache object
+      cache.forEach((record) -> System.out.println(record.key() + " " + record.value()));
     }
   }
   
@@ -217,7 +213,7 @@ public class Client
    */
   private String getLocalValue(int key)
   {
-    synchronized(cache){
+    synchronized(cache){ //now synchronized on cache object
       // binary search, since the list is sorted
       int start = 0;
       int end = cache.size() - 1;

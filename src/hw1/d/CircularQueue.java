@@ -15,12 +15,16 @@ import java.util.NoSuchElementException;
  * thread writes last.
  *
  * 4b.
- *
+ * An error could arise with inconsistent data as a result of an add call, a remove call, and finally another add call.
+ * The first add call would be normal and add a single node, the tail, to the queue. The subsequent call to remove would
+ * see that tail is not null and remove it. The final add is where the error occurs though because due to inconsistent
+ * data the thread sees that tail isn't actually null and attempts to set tails next reference to the new node. The
+ * problem with this is that tail is null and a reference can't be assigned to null.
  */
 public class CircularQueue<T>
 {
   private Node tail = null;
-  
+
   public void add(T item)
   {
     Node temp = new Node(item);

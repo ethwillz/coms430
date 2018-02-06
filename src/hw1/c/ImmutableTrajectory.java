@@ -6,17 +6,13 @@ public class ImmutableTrajectory
 {
     private final Point[] data;
 
-    public ImmutableTrajectory(Point[] data)
-    {
-        this.data = data;
-    }
+    public ImmutableTrajectory(Point[] data) { this.data = data; }
 
     public Point[] getValues()
     {
+        //Return deep copy of array
         Point[] copy = new Point[data.length];
-        for(int i = 0; i < data.length; i++){
-            copy[i] = new Point(data[i].x, data[i].y);
-        }
+        for(int i = 0; i < data.length; i++){ copy[i] = new Point(data[i].x, data[i].y); }
         return copy;
     }
 

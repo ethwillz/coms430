@@ -1,5 +1,7 @@
 package hw1.a;
 
+import java.util.Arrays;
+
 /**
  * State class for a chess game. Outside classes will read and update this state
  * as the game progresses.
@@ -25,12 +27,9 @@ public class ChessGameState {
     }
 
     public synchronized Piece[][] getBoard() {
+        //Make deep copy of board so main array can't be edited
         Piece[][] copy = new Piece[8][8];
-        for(int i = 0; i < 8; i++){
-            for(int j = 0; j < 8; j++){
-                copy[i][j] = board[i][j];
-            }
-        }
+        for(int i = 0; i < 8; i++){ copy[i] = Arrays.copyOf(board[i], board.length); }
         return copy;
     }
 
