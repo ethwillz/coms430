@@ -1,4 +1,4 @@
-package threads_example_code;
+package example_code;
 
 /**
  * A class that violates the "second" aspect of Rule 1.  Even though the same intrinsic lock

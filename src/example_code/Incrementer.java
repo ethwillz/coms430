@@ -1,4 +1,4 @@
-package threads_example_code;
+package example_code;
 
 /**
  * Simple demonstration of a race condition in incorrectly

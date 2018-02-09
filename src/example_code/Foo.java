@@ -1,6 +1,4 @@
-package threads_example_code;
-
-import java.util.ArrayList;
+package example_code;
 
 // A simple counter, not thread safe
 public class Foo

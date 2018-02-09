@@ -1,4 +1,4 @@
-package threads_example_code;
+package example_code;
 
 // the copy-on-write idiom uses an immutable representation
 // of state

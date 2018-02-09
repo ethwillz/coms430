@@ -1,4 +1,4 @@
-package threads_example_code;
+package example_code;
 
 public class SetCheck
 {

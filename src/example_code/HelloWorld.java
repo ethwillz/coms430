@@ -1,4 +1,4 @@
-package threads_example_code;
+package example_code;
 /**
  * Simple program with hw1.b independent threads.
  */

@@ -1,6 +1,4 @@
-package threads_example_code;
-
-import java.util.ArrayList;
+package example_code;
 
 // Fails, because there is still a potential access path to the
 // data after reset(), since the caller may retain an alias to the array.

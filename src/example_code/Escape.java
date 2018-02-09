@@ -1,4 +1,4 @@
-package threads_example_code;
+package example_code;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
