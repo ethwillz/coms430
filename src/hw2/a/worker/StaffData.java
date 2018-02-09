@@ -4,7 +4,7 @@ package hw2.a.worker;
  * Simple data container represents a record for
  * data about a staff member.
  */
-public class StaffData implements Comparable<hw2.worker.StaffData>
+public class StaffData implements Comparable<StaffData>
 {
   /**
    * Staff member's name
@@ -64,7 +64,7 @@ public class StaffData implements Comparable<hw2.worker.StaffData>
   }
 
   @Override
-  public int compareTo(hw2.worker.StaffData other)
+  public int compareTo(StaffData other)
   {
     return name.compareTo(other.getName());
   }

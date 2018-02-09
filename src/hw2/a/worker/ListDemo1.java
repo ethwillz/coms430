@@ -63,7 +63,7 @@ public class ListDemo1 extends JFrame
   private static void createAndShow()
   {
     // create the frame
-    JFrame frame = new hw2.worker.ListDemo1(createTestData());
+    JFrame frame = new ListDemo1(createTestData());
     
     // give it a nonzero size
     //frame.setSize(400, 150);

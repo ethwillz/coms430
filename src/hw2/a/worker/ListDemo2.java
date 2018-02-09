@@ -250,7 +250,7 @@ public class ListDemo2 extends JFrame
 
         worker = new LookupWorker(name);
         worker.start();
-      
+
       }
       else
       {
@@ -333,18 +333,32 @@ public class ListDemo2 extends JFrame
     public void run()
     {
       StaffData newRecord = LookupService.lookup(arg);
-      
-      if (!canceled)
-      {
-        // update model
-        model.addElement(newRecord);
-        int i = model.getSize();
-        list.setSelectedIndex(i - 1);
-        list.ensureIndexIsVisible(i - 1);
+
+      try{
+        if (!canceled)
+        {
+          try{
+            // update model
+            model.addElement(newRecord);
+          }
+          finally{
+            //Since this is a presentation object this must be done from the event thread
+            SwingUtilities.invokeLater(() -> {
+              int i = model.getSize();
+              list.setSelectedIndex(i - 1);
+              list.ensureIndexIsVisible(i - 1);
+            });
+          }
+        }
       }
-      // re-enable add button and remove progress bar
-      addButton.setEnabled(true);
-      bottomPanel.setVisible(false); 
+      finally{
+        //Since this changes a presentation object it must be delegated to the event thread
+        SwingUtilities.invokeLater(() -> {
+          // re-enable add button and remove progress bar
+          addButton.setEnabled(true);
+          bottomPanel.setVisible(false);
+        });
+      }
     }
   }
 }

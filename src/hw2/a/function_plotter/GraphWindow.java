@@ -52,31 +52,40 @@ public class GraphWindow {
      *            Y-coordinate of the new point.
      */
     public void addPoint(final double x, final double y) {
-      points.add(new Point2D.Double(x, y));
-      frame.repaint();
+        //Execute in event thread not main
+        SwingUtilities.invokeLater(() -> {
+            points.add(new Point2D.Double(x, y));
+            frame.repaint();
+        });
     }
 
     /**
      * Erases the current polyline.
      */
     public void clear() {
-      points.clear();
-      frame.repaint();
+        //Execute in event thread not main
+        SwingUtilities.invokeLater(() -> {
+            points.clear();
+            frame.repaint();
+        });
     }    
     
     /**
      * Instantiates and initializes the Swing components for the plotter.
      */
     private void createAndShowWindow() {
-      frame = new JFrame();
-      PlotterPanel panel = new PlotterPanel();
-      frame.getContentPane().add(panel);
-      frame.setSize(500, 500);
-      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-      frame.setTitle("Polyline Plotter");
-      frame.setResizable(false);
-      frame.setAlwaysOnTop(true);
-      frame.setVisible(true);
+        //Execute in event thread not main
+        SwingUtilities.invokeLater(() -> {
+            frame = new JFrame();
+            PlotterPanel panel = new PlotterPanel();
+            frame.getContentPane().add(panel);
+            frame.setSize(500, 500);
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setTitle("Polyline Plotter");
+            frame.setResizable(false);
+            frame.setAlwaysOnTop(true);
+            frame.setVisible(true);
+        });
     }
 
     /**
