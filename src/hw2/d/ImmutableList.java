@@ -1,4 +1,5 @@
 package hw2.d;
+import java.util.ConcurrentModificationException;
 import java.util.NoSuchElementException;
 
 /**
@@ -24,8 +25,8 @@ public class ImmutableList<E>
    */
   private class Node
   {
-    final E data;
-    Node next;
+    private final E data;
+    private final Node next;
 
     public Node(E pData, Node pNext)
     {
@@ -62,9 +63,16 @@ public class ImmutableList<E>
         
     public void add(E item)
     {
-      Node temp = new Node(item, cursor.next);
-      cursor.next = temp;
-      cursor = temp;
+      synchronized(ImmutableList.this){
+        Node temp = cursor;
+        cursor = head;
+        while(cursor.next != temp){
+          if(cursor.next == null) throw new ConcurrentModificationException();
+          cursor = cursor.next;
+        }
+        cursor = cursor.next;
+        cursor = new Node(item, cursor.next);
+      }
     }
   }
 
