@@ -12,7 +12,8 @@ public class Incrementer
   private static final int numberOfOperations = 10000;
   
   private int[] theArray;
-  private Thread[] threads = new Thread[numberOfThreads];
+
+  CountDownLatch startSignal, doneSignal;
 
   public static void main(String[] args)
   {
@@ -22,64 +23,50 @@ public class Incrementer
   
   public Incrementer()
   {
+    startSignal = new CountDownLatch(1);
+    doneSignal = new CountDownLatch(numberOfThreads);
   }
   
-  public void go()
-  {
+  public void go() {
     theArray = new int[length];
     
     // Create a bunch of incrementer threads
     int numberOfIterations = numberOfOperations / numberOfThreads;
     for (int i = 0; i < numberOfThreads; ++i)
     {
-      threads[i] = new IncrementWorker(numberOfIterations, this);
+      new IncrementWorker(numberOfIterations, this, startSignal, doneSignal).start();
     }
-    
-    // Crude attempt to make sure all worker threads are started
-    // more or less at once (this would be better done using
-    // java.util.concurrent.CountDownLatch)
-    Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
+
+    startSignal.countDown();
+
+    long startTime = System.currentTimeMillis();
     
     System.out.println("Starting " + numberOfThreads + " threads to increment all elements of a " +
         length + " element array " + numberOfIterations + " times");
-    
-    long startTime = System.currentTimeMillis();
-    for (int i = 0; i < numberOfThreads; ++i)
-    {
-      threads[i].start();
-    }
 
-    // Crude mechanism to wait for everyone to finish
-    // (this would be better done using java.util.concurrent.CountDownLatch)
-    for (int i = 0; i < numberOfThreads; ++i)
-    {
-      try
-      {
-        threads[i].join();
-      }
-      catch (InterruptedException e)
-      {
-        // shouldn't happen
-      }
-    }
-    
-    long elapsed = System.currentTimeMillis() - startTime;
-    
-    // Examine array contents
-    int expected = numberOfOperations;
-    int count = 0;
-    for (int i = 0; i < length; ++i)
-    {
-      if (theArray[i] != expected)
-      {
-        ++count;
-        System.out.println("theArray[" + i + "] = " + theArray[i]);
-      }
-    }
-    System.out.println("There were " + count + " cells not containing " + expected);
-    
-    System.out.println("Time: " + elapsed);
+    try {
+      doneSignal.await();
 
+      long elapsed = System.currentTimeMillis() - startTime;
+
+      // Examine array contents
+      int expected = numberOfOperations;
+      int count = 0;
+      for (int i = 0; i < length; ++i)
+      {
+        if (theArray[i] != expected)
+        {
+          ++count;
+          System.out.println("theArray[" + i + "] = " + theArray[i]);
+        }
+      }
+      System.out.println("There were " + count + " cells not containing " + expected);
+
+      System.out.println("Time: " + elapsed);
+    }
+    catch(InterruptedException e){
+      e.printStackTrace();
+    }
   }
 
 
@@ -104,18 +91,27 @@ public class Incrementer
   {
     private int iterations;
     private Incrementer incrementer;
+    private final CountDownLatch startSignal, doneSignal;
     
-    public IncrementWorker(int iterations, Incrementer incrementer)
+    public IncrementWorker(int iterations, Incrementer incrementer, CountDownLatch startSignal, CountDownLatch doneSignal)
     {
       this.iterations = iterations;
       this.incrementer = incrementer;
+      this.startSignal = startSignal;
+      this.doneSignal = doneSignal;
     }
     
     public void run()
     {
-      for (int i = 0; i < iterations; ++i)
-      {
-        doIncrement();
+      try {
+        startSignal.await();
+        for (int i = 0; i < iterations; ++i)
+        {
+          doIncrement();
+        }
+        doneSignal.countDown();
+      } catch (InterruptedException e) {
+        e.printStackTrace();
       }
     }
     
