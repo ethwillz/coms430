@@ -13,13 +13,14 @@ public class FileLogger implements Runnable
   private String filename;
   private BlockingQueue<String> queue;
   private ArrayList<String> msgsToProcess;
-  private ExecutorService backgroundExec = Executors.newCachedThreadPool();
+  private ExecutorService backgroundExecutor;
   
   public FileLogger(String filename, ArrayBlockingQueue<String> queue)
   {
     this.filename = filename;
     this.queue = queue;
     msgsToProcess = new ArrayList<>();
+    backgroundExecutor = Executors.newCachedThreadPool();
   }
 
   /**
@@ -27,18 +28,16 @@ public class FileLogger implements Runnable
    * @param msg
    */
   public void log(String msg) {
-    synchronized(queue) {
-      queue.add(msg);
-    }
+    synchronized(queue) { queue.add(msg); }
   }
 
   public void run(){
     while(true) {
-      //Synchronzied on queue because if queue is modified during draining, inconsistent results can follow
+      //Synchronized on queue because if queue is modified during draining, inconsistent results can follow
       synchronized(queue){
         if(queue.drainTo(msgsToProcess) > 0){
-          //Schedules new event synchronized on the instance so that only 1 thread may write to file at a time
-          backgroundExec.execute(() -> {
+          //Schedules writes to file locked on the Logger instance to avoid threads attempting to open multiple streams
+          backgroundExecutor.execute(() -> {
             synchronized (FileLogger.this) {
               try {
                 OutputStream os = new FileOutputStream(filename, true);
@@ -46,7 +45,6 @@ public class FileLogger implements Runnable
                 msgsToProcess.forEach((msg) -> {
                   // timestamp when log method was called with this message
                   Date d = new Date();
-
                   pw.println(d + " " + msg);
                 });
                 pw.close();
