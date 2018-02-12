@@ -1,32 +1,31 @@
 package hw2.d;
-import java.util.ConcurrentModificationException;
 import java.util.NoSuchElementException;
 
 /**
- * Partial implementation of the List interface using 
- * single links and a dummy node. 
+ * Partial implementation of the List interface using
+ * single links and a dummy node.
  */
 public class ImmutableList<E>
 {
   private final Node head;
-  
+
   public ImmutableList()
   {
     head = new Node(null, null);
-  }   
-  
+  }
+
   public SimpleIterator<E> listIterator()
   {
     return new LinkedIterator();
   }
-  
+
   /**
    * Node type for this class.
    */
   private class Node
   {
-    private final E data;
-    private final Node next;
+    final E data;
+    final Node next;
 
     public Node(E pData, Node pNext)
     {
@@ -34,7 +33,7 @@ public class ImmutableList<E>
       next = pNext;
     }
   }
-  
+
   /**
    * Implementation of ListIterator for this class
    */
@@ -43,36 +42,49 @@ public class ImmutableList<E>
     // points to node preceding the next element
     private Node cursor;
 
-    public LinkedIterator()
-    {
-      cursor = head; 
-    }
-    
+    public LinkedIterator() { cursor = copyList(head); }
+
     public boolean hasNext()
     {
       return cursor.next != null;
     }
-    
+
     public E next()
     {
       if (!hasNext()) throw new NoSuchElementException();
-      
+
       cursor = cursor.next;
       return cursor.data;
     }
-        
+
     public void add(E item)
     {
-      synchronized(ImmutableList.this){
-        Node temp = cursor;
-        cursor = head;
-        while(cursor.next != temp){
-          if(cursor.next == null) throw new ConcurrentModificationException();
-          cursor = cursor.next;
-        }
-        cursor = cursor.next;
-        cursor = new Node(item, cursor.next);
+      synchronized(ImmutableList.this) {
+        copyAndSearch(head, cursor.next);
+        //Copy all nodes preceding cursor.next
+
+        //If cursor.next is not accessible from list's head, op fails
+
+        //Add node directly preceding cursor.next
+
+        //Copy backwards to head
+
+        //Update head
       }
+    }
+
+    /**
+     * Copies all nodes in an immutable linked list
+     * @param start starting node to copy immutable list from
+     * @return head node of copy of linked list
+     */
+    private Node copyList(Node start){
+      if(start == null) return null;
+      return new Node(start.data, copyList(start.next));
+    }
+
+    private Node copyAndSearch(E searchObj){
+      return new Node()
     }
   }
 

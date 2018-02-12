@@ -5,10 +5,9 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * This class illustrates some of the potential dangers posed by using parallel streams. The two methods simulate methods
- * which will use streams to map a long network operation onto a list. In this case, not only is the parallel stream
- * slightly slower, but for each network operation you're actually holding up all other tasks that are using parallel
- * streams, NOT just the tasks in this process.
+ * This class illustrates a potential danger of parallel streams. The serial and parallel streams both finished in about
+ * the same amount of time. The difference is that while the long ooperation was being computed in the parallel stream,
+ * no other Java app on the machine is able to use parallel streams."
  */
 public class DangersOfParallelStreams {
 
