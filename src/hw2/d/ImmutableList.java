@@ -1,4 +1,5 @@
 package hw2.d;
+import java.util.ConcurrentModificationException;
 import java.util.NoSuchElementException;
 
 /**
@@ -7,7 +8,7 @@ import java.util.NoSuchElementException;
  */
 public class ImmutableList<E>
 {
-  private final Node head;
+  private Node head;
 
   public ImmutableList()
   {
@@ -59,18 +60,7 @@ public class ImmutableList<E>
 
     public void add(E item)
     {
-      synchronized(ImmutableList.this) {
-        copyAndSearch(head, cursor.next);
-        //Copy all nodes preceding cursor.next
-
-        //If cursor.next is not accessible from list's head, op fails
-
-        //Add node directly preceding cursor.next
-
-        //Copy backwards to head
-
-        //Update head
-      }
+      synchronized(ImmutableList.this) { head = copyAndSearch(head, item); }
     }
 
     /**
@@ -83,8 +73,10 @@ public class ImmutableList<E>
       return new Node(start.data, copyList(start.next));
     }
 
-    private Node copyAndSearch(E searchObj){
-      return new Node()
+    private Node copyAndSearch(Node start, E searchObj){
+      if(start.data.equals(searchObj)) return new Node(start.data, new Node(searchObj, start.next));
+      if(start == null) throw new ConcurrentModificationException();
+      return new Node(start.data, copyAndSearch(start.next, searchObj));
     }
   }
 
