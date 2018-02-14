@@ -42,11 +42,8 @@ public class FileLogger implements Runnable
               try {
                 OutputStream os = new FileOutputStream(filename, true);
                 PrintWriter pw = new PrintWriter(os);
-                msgsToProcess.forEach((msg) -> {
-                  // timestamp when log method was called with this message
-                  Date d = new Date();
-                  pw.println(d + " " + msg);
-                });
+                Date d = new Date();
+                msgsToProcess.forEach((msg) -> { pw.println(d + " " + msg); });
                 pw.close();
               } catch (FileNotFoundException e) { System.err.println("Unable to open log file: " + filename); }
             }

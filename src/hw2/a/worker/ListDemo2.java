@@ -338,8 +338,7 @@ public class ListDemo2 extends JFrame
         if (!canceled)
         {
           try{
-            // update model
-            model.addElement(newRecord);
+            model.addElement(newRecord); // update model
           }
           finally{
             //Since this is a presentation object this must be done from the event thread
@@ -354,8 +353,7 @@ public class ListDemo2 extends JFrame
       finally{
         //Since this changes a presentation object it must be delegated to the event thread
         SwingUtilities.invokeLater(() -> {
-          // re-enable add button and remove progress bar
-          addButton.setEnabled(true);
+          addButton.setEnabled(true);  // re-enable add button and remove progress bar
           bottomPanel.setVisible(false);
         });
       }

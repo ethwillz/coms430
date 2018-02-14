@@ -8,10 +8,12 @@ import java.util.NoSuchElementException;
 public class VersionedList<E>
 {
   private final Node head;
+
+  private volatile int version = 0;
   
   public VersionedList()
   {
-    head = new Node(null, null);
+    head = new Node(version++, null, null);
   }   
   
   public SimpleIterator<E> listIterator()
@@ -24,11 +26,13 @@ public class VersionedList<E>
    */
   private class Node
   {
+    final int id;
     final E data;
     Node next;
 
-    public Node(E pData, Node pNext)
+    public Node(int id, E pData, Node pNext)
     {
+      this.id = id;
       data = pData;
       next = pNext;
     }
@@ -41,10 +45,12 @@ public class VersionedList<E>
   {
     // points to node preceding the next element
     private Node cursor;
+    private int version;
 
     public LinkedIterator()
     {
-      cursor = head; 
+      cursor = head;
+      version = findMaxId(head);
     }
     
     public boolean hasNext()
@@ -52,19 +58,33 @@ public class VersionedList<E>
       return cursor.next != null;
     }
     
-    public E next()
-    {
+    public E next() {
       if (!hasNext()) throw new NoSuchElementException();
-      
+
+      cursor = cursor.next;
+      while (true) {
+        synchronized (cursor) {
+          if(cursor.next == null) throw new NoSuchElementException();
+          if (cursor.next.id < version) break;
+          cursor = cursor.next;
+        }
+      }
       cursor = cursor.next;
       return cursor.data;
     }
         
     public void add(E item)
     {
-      Node temp = new Node(item, cursor.next);
-      cursor.next = temp;
-      cursor = temp;
+      synchronized(cursor){ cursor.next = new Node(version++, item, cursor.next); }
+    }
+
+    private int findMaxId(Node head){
+      int maxId = Integer.MIN_VALUE;
+      while(head != null){
+        if(head.id > maxId) maxId = head.id;
+        head = head.next;
+      }
+      return maxId;
     }
   }
 
