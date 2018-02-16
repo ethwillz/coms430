@@ -1,16 +1,13 @@
-package hw2.c;
-
 /**
  * Simple demonstration of a race condition in incorrectly
  * synchronized code.
  */
 public class Incrementer
 {
-
   private static final int length = 100000;
   private static final int numberOfThreads = 100;
   private static final int numberOfOperations = 10000;
-  
+
   private int[] theArray;
 
   CountDownLatch startSignal, doneSignal;
@@ -20,16 +17,16 @@ public class Incrementer
     Incrementer i = new Incrementer();
     i.go();
   }
-  
+
   public Incrementer()
   {
     startSignal = new CountDownLatch(1);
     doneSignal = new CountDownLatch(numberOfThreads);
   }
-  
+
   public void go() {
     theArray = new int[length];
-    
+
     // Create a bunch of incrementer threads
     int numberOfIterations = numberOfOperations / numberOfThreads;
     for (int i = 0; i < numberOfThreads; ++i)
@@ -37,15 +34,15 @@ public class Incrementer
       new IncrementWorker(numberOfIterations, this, startSignal, doneSignal).start();
     }
 
-    startSignal.countDown();
+    startSignal.countDown(); //start all threads
 
     long startTime = System.currentTimeMillis();
-    
+
     System.out.println("Starting " + numberOfThreads + " threads to increment all elements of a " +
         length + " element array " + numberOfIterations + " times");
 
     try {
-      doneSignal.await();
+      doneSignal.await(); //wait for all threads to finish
 
       long elapsed = System.currentTimeMillis() - startTime;
 
@@ -92,7 +89,7 @@ public class Incrementer
     private int iterations;
     private Incrementer incrementer;
     private final CountDownLatch startSignal, doneSignal;
-    
+
     public IncrementWorker(int iterations, Incrementer incrementer, CountDownLatch startSignal, CountDownLatch doneSignal)
     {
       this.iterations = iterations;
@@ -100,21 +97,21 @@ public class Incrementer
       this.startSignal = startSignal;
       this.doneSignal = doneSignal;
     }
-    
+
     public void run()
     {
       try {
-        startSignal.await();
+        startSignal.await(); //waits for all threads to be ready to run
         for (int i = 0; i < iterations; ++i)
         {
           doIncrement();
         }
-        doneSignal.countDown();
+        doneSignal.countDown(); //signals that the thread is finished executing
       } catch (InterruptedException e) {
         e.printStackTrace();
       }
     }
-    
+
     private void doIncrement()
     {
       incrementer.incrementArray();
@@ -122,4 +119,3 @@ public class Incrementer
   }
 
 }
-

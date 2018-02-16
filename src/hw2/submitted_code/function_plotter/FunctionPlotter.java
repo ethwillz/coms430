@@ -1,5 +1,3 @@
-package hw2.a.function_plotter;
-
 /**
  * A FunctionPlotter object plots the graph of a given
  * function on a GraphWindow window.  The function to be
@@ -12,14 +10,14 @@ public class FunctionPlotter
    * The Plotter to be used.
    */
   private GraphWindow graphWindow;
-  
+
   /**
    * Distance between x-values to be plotted.
    */
   private double gap;
-  
+
   /**
-   * Constructs a new GraphingCalculator that will use the 
+   * Constructs a new GraphingCalculator that will use the
    * given sampling gap.
    * @param samplingGap
    */
@@ -28,12 +26,12 @@ public class FunctionPlotter
     gap = samplingGap;
     graphWindow = new GraphWindow();
   }
-  
+
 
   /**
    * Sends a sequence of points to the plotter for
    * plotting the given function.
-   * 
+   *
    * @param f
    *   the function to be plotted
    */

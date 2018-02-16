@@ -8,15 +8,20 @@ import java.util.stream.StreamSupport;
 /**
  * This is a mock data structure which is a basic array-backed list implementation. The purpose is to illustrate some
  * of the different ways to implement Spliterators, outlined in the spliterator method.
- * @param <E>
+ * @param <E> Type of data to hold in list
+ *
+ * https://docs.oracle.com/javase/8/docs/api/java/util/Spliterator.html
  */
-public class ArrBackedListWSpliteratorOps<E> implements List<E> {
+public class SpliteratorImplementationExamples<E> implements List<E> {
     private final int DEFAULT_SIZE = 10;
     private int cursorIndex;
     private E arr[];
 
     public static void main(String[] args){
-        ArrBackedListWSpliteratorOps<String> abl = new ArrBackedListWSpliteratorOps<>();
+        //Look into ArrayList's Spliterator
+        ArrayList<String> thisHasNoFunctionalPurpose;
+
+        SpliteratorImplementationExamples<String> abl = new SpliteratorImplementationExamples<>();
         abl.add("Hello");
         abl.add("Goodbye");
 
@@ -47,7 +52,7 @@ public class ArrBackedListWSpliteratorOps<E> implements List<E> {
 
     }
 
-    public ArrBackedListWSpliteratorOps(){
+    public SpliteratorImplementationExamples(){
         arr = (E[]) new Object[DEFAULT_SIZE];
         cursorIndex = 0;
     }
@@ -195,9 +200,9 @@ public class ArrBackedListWSpliteratorOps<E> implements List<E> {
 
         private int currentIndex = 0;
 
-        private ArrBackedListWSpliteratorOps<E> arr;
+        private SpliteratorImplementationExamples<E> arr;
 
-        public ArrayBackedListSpliterator(ArrBackedListWSpliteratorOps<E> arr){
+        public ArrayBackedListSpliterator(SpliteratorImplementationExamples<E> arr){
             this.arr = arr;
         }
 

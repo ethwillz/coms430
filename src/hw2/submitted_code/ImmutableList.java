@@ -1,4 +1,3 @@
-package hw2.d;
 import java.util.ConcurrentModificationException;
 import java.util.NoSuchElementException;
 
@@ -43,7 +42,11 @@ public class ImmutableList<E>
     // points to node preceding the next element
     private Node cursor;
 
-    public LinkedIterator() { cursor = copyList(head); }
+    public LinkedIterator() {
+      synchronized(ImmutableList.this){
+        cursor = copyList(head);
+      }
+    }
 
     public boolean hasNext()
     {
@@ -60,7 +63,13 @@ public class ImmutableList<E>
 
     public void add(E item)
     {
-      synchronized(ImmutableList.this) { head = copyAndSearch(head, item); }
+      synchronized(ImmutableList.this) {
+        if (isNextReachable(cursor)) {
+          head = copyListAndAdd(head, item);
+        } else {
+          throw new ConcurrentModificationException();
+        }
+      }
     }
 
     /**
@@ -73,10 +82,30 @@ public class ImmutableList<E>
       return new Node(start.data, copyList(start.next));
     }
 
-    private Node copyAndSearch(Node start, E searchObj){
-      if(start.data.equals(searchObj)) return new Node(start.data, new Node(searchObj, start.next));
-      if(start == null) throw new ConcurrentModificationException();
-      return new Node(start.data, copyAndSearch(start.next, searchObj));
+    /**
+     * Checks to make sure the next reference from cursor is reachable from head
+     * @param cursor Node whose next is being evaluated
+     * @return true if the next reference is reachable
+     */
+    private boolean isNextReachable(Node cursor){
+      Node cur, cursorNext = cursor.next;
+      synchronized(ImmutableList.this) { cur = head; }
+      while(cur.next != cursorNext) {
+        if(cur.next == null) return false; //because .equals args must be non-null so can't handle in while loop
+        cur = cur.next;
+      }
+      return cur.next.equals(cursorNext);
+    }
+
+    /**
+     * Copies list from head adding in a new item after the cursor
+     * @param cur Current cursor of the list
+     * @param item Item to be added to list
+     * @return start of list with new node added
+     */
+    private Node copyListAndAdd(Node cur, E item){
+      if(cur.equals(cursor)) return new Node(cur.data, new Node(item, cur.next));
+      return new Node(cur.data, copyListAndAdd(cur.next, item));
     }
   }
 

@@ -1,4 +1,3 @@
-package hw2.b;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
@@ -14,7 +13,7 @@ public class FileLogger implements Runnable
   private BlockingQueue<String> queue;
   private ArrayList<String> msgsToProcess;
   private ExecutorService backgroundExecutor;
-  
+
   public FileLogger(String filename, ArrayBlockingQueue<String> queue)
   {
     this.filename = filename;
@@ -23,10 +22,6 @@ public class FileLogger implements Runnable
     backgroundExecutor = Executors.newCachedThreadPool();
   }
 
-  /**
-   * Adds message to blocking queue
-   * @param msg
-   */
   public void log(String msg) {
     synchronized(queue) { queue.add(msg); }
   }
@@ -38,15 +33,13 @@ public class FileLogger implements Runnable
         if(queue.drainTo(msgsToProcess) > 0){
           //Schedules writes to file locked on the Logger instance to avoid threads attempting to open multiple streams
           backgroundExecutor.execute(() -> {
-            synchronized (FileLogger.this) {
-              try {
-                OutputStream os = new FileOutputStream(filename, true);
-                PrintWriter pw = new PrintWriter(os);
-                Date d = new Date();
-                msgsToProcess.forEach((msg) -> { pw.println(d + " " + msg); });
-                pw.close();
-              } catch (FileNotFoundException e) { System.err.println("Unable to open log file: " + filename); }
-            }
+            try {
+              OutputStream os = new FileOutputStream(filename, true);
+              PrintWriter pw = new PrintWriter(os);
+              Date d = new Date();
+              msgsToProcess.forEach((msg) -> { pw.println(d + " " + msg); });
+              pw.close();
+            } catch (FileNotFoundException e) { System.err.println("Unable to open log file: " + filename); }
           });
         }
       }

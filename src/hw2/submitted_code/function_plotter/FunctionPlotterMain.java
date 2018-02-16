@@ -1,4 +1,3 @@
-package hw2.a.function_plotter;
 import java.util.Scanner;
 
 /**
@@ -9,15 +8,15 @@ public class FunctionPlotterMain
   public static void main(String[] args)
   {
     FunctionPlotter calc = new FunctionPlotter(0.1);
-    
-    // A variable of type SVFunction can refer to 
-    // any subtype (that is, any class that implements the 
+
+    // A variable of type SVFunction can refer to
+    // any subtype (that is, any class that implements the
     // SingleVariableFunction interface).
     SVFunction f = null;
-    
+
     Scanner scanner = new Scanner(System.in);
     String s = getEntry(scanner);
-    
+
     while (!s.equals("q"))
     {
       if (s.equals("a"))
@@ -41,7 +40,7 @@ public class FunctionPlotterMain
         // Now whatever f refers to, we can plot it
         calc.plotFunction(f);
       }
-      
+
       s = getEntry(scanner);
     }
   }
@@ -59,8 +58,8 @@ public class FunctionPlotterMain
     System.out.println("a) Linear function");
     System.out.println("b) Quadratic function");
     System.out.println("c) Sine function");
-    System.out.print("Your choice: ");    
-    return scanner.next();  
+    System.out.print("Your choice: ");
+    return scanner.next();
   }
 
 

@@ -1,5 +1,3 @@
-package hw2.a.worker;
-
 import java.util.Random;
 
 /**
@@ -20,9 +18,9 @@ public class LookupService
     "Roadie",
     "Cookie Taster",
   };
-  
+
   private static Random rand = new Random();
-    
+
   public static StaffData lookup(String name)
   {
     long millis = 4000 + rand.nextInt(8000);
@@ -38,16 +36,16 @@ public class LookupService
       return null;
     }
   }
-  
+
   private static void lookBusy(long millis) throws InterruptedException
   {
     long interval = 300;
     long stop = System.currentTimeMillis() + millis;
-    while(!Thread.currentThread().isInterrupted() && 
+    while(!Thread.currentThread().isInterrupted() &&
         System.currentTimeMillis() < stop)
     {
       System.out.print(".");
-      Thread.sleep(interval);      
+      Thread.sleep(interval);
     }
   }
 

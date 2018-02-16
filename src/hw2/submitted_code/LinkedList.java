@@ -1,24 +1,23 @@
-package hw2.d;
 import java.util.NoSuchElementException;
 
 /**
- * Partial implementation of the List interface using 
- * single links and a dummy node. 
+ * Partial implementation of the List interface using
+ * single links and a dummy node.
  */
 public class LinkedList<E>
 {
   private final Node head;
-  
+
   public LinkedList()
   {
     head = new Node(null, null);
-  }   
-  
+  }
+
   public SimpleIterator<E> listIterator()
   {
     return new LinkedIterator();
   }
-  
+
   /**
    * Node type for this class.
    */
@@ -33,7 +32,7 @@ public class LinkedList<E>
       next = pNext;
     }
   }
-  
+
   /**
    * Implementation of ListIterator for this class
    */
@@ -44,22 +43,22 @@ public class LinkedList<E>
 
     public LinkedIterator()
     {
-      cursor = head; 
+      cursor = head;
     }
-    
+
     public boolean hasNext()
     {
       return cursor.next != null;
     }
-    
+
     public E next()
     {
       if (!hasNext()) throw new NoSuchElementException();
-      
+
       cursor = cursor.next;
       return cursor.data;
     }
-        
+
     public void add(E item)
     {
       Node temp = new Node(item, cursor.next);

@@ -1,16 +1,18 @@
 Java 8 Parallel Streams Presentation:
 
-1. Basics of streams
-    * Pipeline is composed of a stream source. optional, uncapped intermediate operations, and a terminal operation.
-    - Streams don't actually perform calculations until the terminal operation which makes performance great
-2. Ease of adding parallelization
-    - Streams can be easily made into parallel operations
+1. Ease of adding parallelization to a stream
+    * Streams can be easily made into parallel operations with .parallel or .parallelStream
     * Data structures can be adapted by adding a Spliterator
         - Look through ArrayList's as super good example
         - Go through a couple simple implementations
 3. Collectors
-    - How they work
+    * How they work
     - Use cases
 4. Dangers of parallel streams
     * Submitting long-running tasks to the thread pool causes blockage of all parallel stream tasks
     - Tristan's story of trying to manage transactions with parallel streams
+        - Was trying to process transactions through our accounting system faster which involved modifications to other
+          parts of the system based on the data processed
+        - Spent 2 days constantly messing up data (I think he has a test table in dev, hopefully)
+        - Ended up figuring out that the List he was storing everything in wasn't thread safe so he has all kinds of
+          thread collisions trying to edit data concurrently

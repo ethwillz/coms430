@@ -1,6 +1,3 @@
-package hw2.a.function_plotter;
-
-
 /**
  * Interface representing attributes and behavior
  * of a single-variable function that can be displayed

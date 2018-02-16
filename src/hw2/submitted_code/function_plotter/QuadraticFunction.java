@@ -1,4 +1,3 @@
-package hw2.a.function_plotter;
 /**
  * Class representing a quadratic function.
  */
@@ -8,17 +7,17 @@ public class QuadraticFunction implements SVFunction
    * Leading coefficient.
    */
   private double a;
-  
+
   /**
    * Middle coefficient.
    */
   private double b;
-  
+
   /**
    * Constant term.
    */
   private double c;
-  
+
   /**
    * Constructs a quadratic function with the given coefficients.
    * @param givenA
@@ -31,7 +30,7 @@ public class QuadraticFunction implements SVFunction
     b = givenB;
     c = givenC;
   }
-  
+
   /**
    * Returns the y-value for the given x.
    */

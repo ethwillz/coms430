@@ -1,26 +1,25 @@
-package hw2.d;
 import java.util.NoSuchElementException;
 
 /**
- * Partial implementation of the List interface using 
- * single links and a dummy node. 
+ * Partial implementation of the List interface using
+ * single links and a dummy node.
  */
 public class VersionedList<E>
 {
   private final Node head;
 
   private volatile int version = 0;
-  
+
   public VersionedList()
   {
     head = new Node(version++, null, null);
-  }   
-  
+  }
+
   public SimpleIterator<E> listIterator()
   {
     return new LinkedIterator();
   }
-  
+
   /**
    * Node type for this class.
    */
@@ -37,7 +36,7 @@ public class VersionedList<E>
       next = pNext;
     }
   }
-  
+
   /**
    * Implementation of ListIterator for this class
    */
@@ -49,40 +48,53 @@ public class VersionedList<E>
 
     public LinkedIterator()
     {
-      cursor = head;
+      synchronized(head) {
+        cursor = head;
+      }
       version = findMaxId(head);
     }
-    
+
     public boolean hasNext()
     {
-      return cursor.next != null;
+      synchronized(cursor) {
+        return cursor.next != null;
+      }
     }
-    
-    public E next() {
-      if (!hasNext()) throw new NoSuchElementException();
 
-      cursor = cursor.next;
-      while (true) {
-        synchronized (cursor) {
-          if(cursor.next == null) throw new NoSuchElementException();
+    public E next() {
+      synchronized(cursor) {
+        if (!hasNext()) throw new NoSuchElementException();
+        cursor = cursor.next;
+      }
+
+      while (true) synchronized (cursor) { //needs to update lock each node traversed
+          if (cursor.next == null) throw new NoSuchElementException();
           if (cursor.next.id < version) break;
           cursor = cursor.next;
-        }
       }
-      cursor = cursor.next;
-      return cursor.data;
-    }
-        
-    public void add(E item)
-    {
-      synchronized(cursor){ cursor.next = new Node(version++, item, cursor.next); }
+
+      synchronized(cursor) {
+        cursor = cursor.next;
+        return cursor.data;
+      }
     }
 
-    private int findMaxId(Node head){
+    public void add(E item)
+    {
+      synchronized(cursor) { cursor.next = new Node(version++, item, cursor.next); }
+    }
+
+    /**
+     * Finds maximum ID in list in the current version of the list
+     * @param start starting node to find max ID from (should always be head)
+     * @return
+     */
+    private int findMaxId(Node start){
       int maxId = Integer.MIN_VALUE;
-      while(head != null){
-        if(head.id > maxId) maxId = head.id;
-        head = head.next;
+      while(true) synchronized (start) {
+        if (start == null) break; //needs to be under lock for consistency so can't be in loop condition
+        if (start.id > maxId) maxId = start.id;
+        start = start.next;
       }
       return maxId;
     }

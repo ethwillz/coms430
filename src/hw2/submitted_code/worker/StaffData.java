@@ -1,5 +1,3 @@
-package hw2.a.worker;
-
 /**
  * Simple data container represents a record for
  * data about a staff member.
@@ -10,17 +8,17 @@ public class StaffData implements Comparable<StaffData>
    * Staff member's name
    */
   String name;
-  
+
   /**
    * Staff member's title
    */
   String title;
-  
+
   /**
    * Staff member's employee id number
    */
   int id;
-  
+
   /**
    * Constructs a new StaffData record.
    * @param name
@@ -36,22 +34,22 @@ public class StaffData implements Comparable<StaffData>
     this.title = title;
     this.id = id;
   }
-  
+
   public String getName()
   {
     return name;
   }
-  
+
   public int getId()
   {
     return id;
   }
-  
+
   public String getTitle()
   {
     return title;
   }
-  
+
   public String toString()
   {
     StringBuilder sb = new StringBuilder();
@@ -69,5 +67,5 @@ public class StaffData implements Comparable<StaffData>
     return name.compareTo(other.getName());
   }
 
-  
+
 }

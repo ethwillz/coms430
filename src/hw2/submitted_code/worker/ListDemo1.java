@@ -1,5 +1,3 @@
-package hw2.a.worker;
-
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -15,14 +13,13 @@ import java.util.List;
  * data, and when the data is changed the JList
  * is notified.
  * <p>
- * In this version there is an "Add" button that starts
- * up a time-consuming lookup task that is performed in the
- * background using a helper thread.  An animated indicator
- * is shown while the background work is being
- * done, and the user has the opportunity to cancel the task.
- * THIS CODE HAS MAJOR RACE CONDITIONS
+ * THIS VERSION HAS A MAJOR DEFECT! There is an "Add"
+ * button that starts up a time-consuming lookup task.
+ * Since this task is performed in the event dispatch
+ * thread, the UI is completely unresponsive while
+ * this task is being performed.
  */
-public class ListDemo2 extends JFrame
+public class ListDemo1 extends JFrame
 {
   private JButton button;
   private JButton addButton;
@@ -31,18 +28,16 @@ public class ListDemo2 extends JFrame
   private JPanel panel;
   private JList<String> list;
   private JTextArea textArea;
-  
-  private LookupWorker worker;
   private JProgressBar progressBar;
   private JButton cancelButton;
   private JPanel bottomPanel;
-  
+
   // The actual data is stored in this custom
   // instance of ListModel
   private DemoModel model;
 
   /**
-   * Entry point. This method should normally do 
+   * Entry point. This method should normally do
    * nothing except (possibly) parse command-line
    * arguments and invoke a helper method for creating
    * and starting up the UI.
@@ -58,7 +53,7 @@ public class ListDemo2 extends JFrame
     };
     SwingUtilities.invokeLater(r);
   }
-  
+
   /**
    * Static helper method creates the frame and
    * makes it visible.
@@ -66,20 +61,20 @@ public class ListDemo2 extends JFrame
   private static void createAndShow()
   {
     // create the frame
-    JFrame frame = new ListDemo2(createTestData());
-    
+    JFrame frame = new ListDemo1(createTestData());
+
     // give it a nonzero size
     //frame.setSize(400, 150);
     frame.pack();
-    
-    // we want to shut down the application if the 
+
+    // we want to shut down the application if the
     // "close" button is pressed on the frame
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    
+
     // make the frame visible and start the UI machinery
     frame.setVisible(true);
   }
-  
+
   /**
    * Some fake data for testing.
    */
@@ -90,9 +85,9 @@ public class ListDemo2 extends JFrame
     "Ajustos Miros", "Quality control technician",
     "Erasmus B. Draggin", "Working mother support group",
     "Warren Peace", "Leo Tolstoy biographer",
-    
+
   };
-  
+
   /**
    * Creates an initial list of the fake data
    * for testing.
@@ -110,18 +105,18 @@ public class ListDemo2 extends JFrame
     }
     return ret;
   }
-  
-  
+
+
   /**
    * Constructor creates all components that will
-   * be contained in this frame, but does not 
+   * be contained in this frame, but does not
    * set the size or attempt to make itself visible.
-   * 
+   *
    * @param initialData
    *   data with which the list is populated when first
    *   displayed
    */
-  public ListDemo2(List<StaffData> initialData)
+  public ListDemo1(List<StaffData> initialData)
   {
     if (initialData != null)
     {
@@ -131,28 +126,28 @@ public class ListDemo2 extends JFrame
     {
       model = new DemoModel(new ArrayList<StaffData>());
     }
-    
-    // Create a list box with the underlying model.  
-    // The list box will add itself as a listener 
+
+    // Create a list box with the underlying model.
+    // The list box will add itself as a listener
     // to be notified of changes in the model's data.
     model.sortUp();
     list = new JList<String>(model);
 
     // Allow only one list item to be selected at a time
     list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-    
+
     // Initially the list comes up with the first item selected
     list.setSelectedIndex(0);
 
     // Start out with vertical space for four items
     list.setVisibleRowCount(4);
-    
+
     // Create the selection listener
     list.addListSelectionListener(new MyListSelectionListener());
 
     // panel to contain the checkbox and Delete button
     panel = new JPanel();
-        
+
     // check box initially checked
     checkBox = new JCheckBox("sort ascending");
     checkBox.setSelected(true);
@@ -164,16 +159,16 @@ public class ListDemo2 extends JFrame
     ActionListener buttonListener = new MyButtonListener();
     button.addActionListener(buttonListener);
     panel.add(button);
-    
+
     // Add button
     addButton = new JButton("Add");
     addButton.addActionListener(buttonListener);
-    panel.add(addButton);    
+    panel.add(addButton);
     addField = new JTextField(15);
     panel.add(addField);
 
     // textArea for display of full data for the highlighted
-    // item in the list.  Make sure it is at least 25 columns wide. 
+    // item in the list.  Make sure it is at least 25 columns wide.
     // Display initial data from element 0 because we set up the
     // JList to start with item 0 selected
     textArea = new JTextArea(0, 25);
@@ -187,10 +182,10 @@ public class ListDemo2 extends JFrame
     bottomPanel = new JPanel();
     bottomPanel.add(progressBar);
     bottomPanel.add(cancelButton);
- 
+
     // Put the list box and the text area in scroll
-    // panes, and put them both in a JSplitPane.  
-    // The preferred width of the list will 
+    // panes, and put them both in a JSplitPane.
+    // The preferred width of the list will
     // set the initial position of the divider
     // for the JSplitPane.
     JSplitPane splitPane = new JSplitPane();
@@ -199,29 +194,31 @@ public class ListDemo2 extends JFrame
     splitPane.setLeftComponent(scroll1);
     splitPane.setRightComponent(scroll2);
 
-    // add panel as the NORTH component and use 
-    // CENTER for the JSplitPane to take up 
+    // add panel as the NORTH component and use
+    // CENTER for the JSplitPane to take up
     // all remaining space
     getContentPane().add(panel, BorderLayout.NORTH);
-    getContentPane().add(splitPane, BorderLayout.CENTER);    
+    getContentPane().add(splitPane, BorderLayout.CENTER);
     getContentPane().add(bottomPanel, BorderLayout.SOUTH);
-    
+
     // bottom panel for progress/cancellation initially invisible
     bottomPanel.setVisible(false);
   }
-  
-  
-  
 
-  
+
+
+
+
   /**
-   * Listener for delete buttons. 
+   * Listener for delete buttons.
    */
   private class MyButtonListener implements ActionListener
   {
     @Override
     public void actionPerformed(ActionEvent event)
     {
+      boolean canceled = false;
+
       if (event.getSource() == button)
       {
         // Delete button
@@ -242,29 +239,31 @@ public class ListDemo2 extends JFrame
       }
       else if (event.getSource() == addButton)
       {
-        // Add button          
-        String name = addField.getText();
+        // Add button
+        final String name = addField.getText();
         addField.setText("");
-        addButton.setEnabled(false);
-        bottomPanel.setVisible(true);
 
-        worker = new LookupWorker(name);
-        worker.start();
+        // blocks the dispatch thread for 4-12 seconds
+        StaffData newRecord = LookupService.lookup(name);
 
+        if (!canceled)
+        {
+          model.addElement(newRecord);
+          int i = model.getSize();
+          list.setSelectedIndex(i - 1);
+          list.ensureIndexIsVisible(i - 1);
+        }
       }
       else
       {
         // Cancel button
         System.out.println("cancelling");
-        if (worker != null)
-        {
-          worker.cancel();
-        }
+        canceled = true;
       }
     }
-    
+
   }
-  
+
   /**
    * Listener for the check box causes the list to be
    * sorted in ascending or descending order.
@@ -272,7 +271,7 @@ public class ListDemo2 extends JFrame
   private class MyCheckBoxListener implements ActionListener
   {
     public void actionPerformed(ActionEvent event)
-    {       
+    {
       if (checkBox.isSelected())
       {
         model.sortUp();
@@ -281,7 +280,7 @@ public class ListDemo2 extends JFrame
       {
         model.sortDown();
       }
-      
+
       list.setSelectedIndex(0);
       list.ensureIndexIsVisible(0);
       textArea.setText(model.getElement(0).toString());
@@ -289,8 +288,8 @@ public class ListDemo2 extends JFrame
   }
 
   /**
-   * List selection listener.  When a list item is selected, 
-   * we display the full text describing the highlighted 
+   * List selection listener.  When a list item is selected,
+   * we display the full text describing the highlighted
    * item in the text area.
    */
   private class MyListSelectionListener implements ListSelectionListener
@@ -304,59 +303,7 @@ public class ListDemo2 extends JFrame
         StaffData d = model.getElement(index);
         textArea.setText(d.toString());
       }
-    }      
-  }
-
-
-  
-  
-  /**
-   * Helper thread to do employee lookup in background.
-   */
-  private class LookupWorker extends Thread
-  {
-    private boolean canceled;
-    private String arg;
-    
-    public LookupWorker(String arg)
-    {
-      this.arg = arg;
-      canceled = false;
-    }
-    
-    public void cancel()
-    {
-      canceled = true;
-      this.interrupt();
-    }
-    
-    public void run()
-    {
-      StaffData newRecord = LookupService.lookup(arg);
-
-      try{
-        if (!canceled)
-        {
-          try{
-            model.addElement(newRecord); // update model
-          }
-          finally{
-            //Since this is a presentation object this must be done from the event thread
-            SwingUtilities.invokeLater(() -> {
-              int i = model.getSize();
-              list.setSelectedIndex(i - 1);
-              list.ensureIndexIsVisible(i - 1);
-            });
-          }
-        }
-      }
-      finally{
-        //Since this changes a presentation object it must be delegated to the event thread
-        SwingUtilities.invokeLater(() -> {
-          addButton.setEnabled(true);  // re-enable add button and remove progress bar
-          bottomPanel.setVisible(false);
-        });
-      }
     }
   }
+
 }

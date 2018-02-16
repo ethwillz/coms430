@@ -1,5 +1,3 @@
-package hw2.a.function_plotter;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -45,7 +43,7 @@ public class GraphWindow {
     /**
      * Extends the polyline to the specified
      * point.
-     * 
+     *
      * @param x
      *            X-coordinate of the new point.
      * @param y
@@ -68,8 +66,8 @@ public class GraphWindow {
             points.clear();
             frame.repaint();
         });
-    }    
-    
+    }
+
     /**
      * Instantiates and initializes the Swing components for the plotter.
      */
@@ -93,7 +91,7 @@ public class GraphWindow {
      * polyline.
      */
     private class PlotterPanel extends JPanel {
-        
+
         /**
          * Draws the polyline.
          */
@@ -104,9 +102,9 @@ public class GraphWindow {
             g2.fillRect(0, 0, getWidth(), getHeight());
             g2.setStroke(new BasicStroke(0));
 
-            // All our coordinates are in (VIEWPORT_MIN, VIEWPORT_MAX), 
-            // and these need to be transformed into pixel coordinates. 
-            // The y-axis also needs to be flipped since the origin starts 
+            // All our coordinates are in (VIEWPORT_MIN, VIEWPORT_MAX),
+            // and these need to be transformed into pixel coordinates.
+            // The y-axis also needs to be flipped since the origin starts
             // off at the top left instead of the bottom left.
             int half_width = getWidth() / 2;
             int half_height = getHeight() / 2;
@@ -120,7 +118,7 @@ public class GraphWindow {
                 g2.draw(new Line2D.Double(j, VIEWPORT_MIN, j, VIEWPORT_MAX));
                 g2.draw(new Line2D.Double(VIEWPORT_MIN, j, VIEWPORT_MAX, j));
             }
-            
+
             // Draw axes in black
             g2.setPaint(Color.black);
             g2.draw(new Line2D.Double(VIEWPORT_MIN, 0, VIEWPORT_MAX, 0));

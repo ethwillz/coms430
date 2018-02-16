@@ -1,5 +1,3 @@
-package hw2.c;
-
 public class CountDownLatch
 {
     private int count;

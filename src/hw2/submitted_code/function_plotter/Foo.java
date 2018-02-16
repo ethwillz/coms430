@@ -1,5 +1,3 @@
-package hw2.a.function_plotter;
-
 public class Foo implements SVFunction
 {
 
