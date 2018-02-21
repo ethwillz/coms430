@@ -41,10 +41,15 @@
 
 \tableofcontents
 
+% NOTES:
+% Processing of parallel streams with JVM's ForkJoinPool.common() && calling thread
+%  -Making own pool is an easy way to get around this
+% Make mention of using thread-safe vs non thread-safe ds (probably in dangers section)
+
 \setcounter{section}{-1}
 \section{Prerequisites}
 \subsection{Technical}
-This document was written for Java developers who have an interest in using concurrency in streams, and as such assumes knowledge of serial streams. Developers in other languages with similar mechanisms such as C\# with \verb|Linq| may also find the topics useful with the understanding that syntax, implementation, and functionality will differ.
+This document was written for Java developers who have an interest in using concurrency in streams, and as such assumes knowledge of serial streams and lambda expressions. Developers in other languages with similar mechanisms such as C\# with \verb|Linq| may also find the topics useful with the understanding that syntax, implementation, and functionality will differ.
 
 Additionally, functional knowledge of \verb|java.util.concurrent| and the \verb|Consumer| interface will help in gaining a more practical knowledge but is not required.
 \subsection{Language} \label{language}
@@ -56,10 +61,11 @@ Some of the language used in this paper may be ambiguous/confusing, the author's
 \section{Introduction} % make content "basics" section of previous outline
 Parallel streams were introduced into Java 8 alongside serial streams so that developers could utilize concurrency to make stream processing faster.  Concurrency allows the program to utilize threads, in the case of streams this is all handled by the JVM, in order to more efficiently utilize modern multiprocessor design.
 
+Making a serial stream into a parallel stream is as easy as calling \verb|parallel()| after \verb|stream()|. In order for the \verb|parallel()| method to be applicable on the stream, the \verb|Collection| miust have an implementation of a \verb|Spliterator|, an object which can effectively break up a collection to be processed separately. 
 
-% add more here
+Several operations are better suited to being used in parallel streams rather than serial streams, as is the case with \verb|Collector|s. Calling the \verb|collect()| method on the stream which will reduce and serialize it based on the behavior of the \verb|Collector| object passed as an argument. Parallel streams are better suited to using Collectors because reduction can only be accomplished this way whereas in serial streams there are several methods to accomplish this (although in many cases a \verb|Collector| is the best option).
 
-
+Despite parallel streams being introduced into Java to simplify concurrency, developers can easily corrupt data and cause system bugs. This occurs due to developers not paying adequate attention to traditional Java concurrency practices as well as some of the special considerations with streams. %ADD CONTENT ABOUT SPECIFIC DANGERS
 \section{Spliterator}
 The \verb|Spliterator| is the backbone of parallel streams, allowing the program to split a collection apart and iterate through it. If a class extending a \verb|Collection| does not have a \verb|spliterator()| method returning a \verb|Spliterator| object, then Java is not able to process the collection with a parallel stream at all.
 
@@ -124,7 +130,22 @@ public Spliterator<E> trySplit() {
 \end{figure}
 
 \section{Collectors}
-\section{Practical Considerations when Using Parallel Streams}
-\end{document}
+A \verb|Collector| object defines a mutable reduction operation for a group of input elements, in other words a \verb|Collector| will put the elements of a stream into a container. The example shown in Figure \ref{fig:employee_collection} groups employees by department into a \verb|Map| object with the department as the key and a list of employees in that deparment as a value. \verb|Collector|s are commonly used for parallel operations as many data aggregations such as putting elements into a map are impossible to do without thread-safe data structures.
 
+\begin{figure}[H]
+\begin{lstlisting}[language=Java]
+Map<Department, List<Employee>> byDept
+    = employees.stream()
+       .collect(Collectors.groupingBy(Employee::getDepartment));
+\end{lstlisting}
+\caption{Reduction of employees into map by a Collector}
+\label{fig:employee_collection}
+\end{figure}
+\section{Practical Considerations when Using Parallel Streams}
+Using parallel streams may seem easy but there are several common pitfalls for developers. These arise from not following good Java concurrency practices as well as an unawareness of how parallel streams are processed by the JVM.
+
+One Java concurrency practice that is easy to forget using streams is the thread-safety of the data structures being used.
+
+% see if I can get stats on simple degradation of performance using long-running op
+Mistakes that can arise from not knowing Java's implementation can have arguably more severe consequences on application performance. One example relates to how the JVM breaks a parallel stream into threads. When a parallel stream is processes, the JVM begins by processing on the calling thread. As more subtasks are broken off, the JVM gets threads from \verb|ForkJoinPool.common()|, which is a common thread pool used in the background of the whole application. Since this is a common thread pool, one example of an error that could arise is if there is a long-running operation in a parallel stream. Each thread in the pool will be consumed executing that operation and subsequently all other JVM tasks using the common thread pool have to wait. This can lead to severe degradation in performance.
 \end{document}
