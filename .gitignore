@@ -3,3 +3,8 @@
 .DS_Store
 *.iml
 .bash_profile
+*.toz
+*.aux
+*.log
+*.gz
+*.txt
