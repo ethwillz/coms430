@@ -34,7 +34,7 @@
     \field{year}{2017}
   \endentry
 
-  \entry{ibm_uh_3}{online}{}
+  \entry{ibm_streams}{online}{}
     \name{author}{1}{}{%
       {{hash=GB}{%
          family={Goetz},
@@ -52,16 +52,31 @@
     \field{labeltitlesource}{title}
     \field{sortinit}{G}
     \field{sortinithash}{G}
-    \field{subtitle}{Java Streams, Part 3}
-    \field{titleaddon}{Understand java.util.stream internals}
-    \field{title}{Streams under the hood}
+    \field{title}{Java Streams}
     \verb{url}
-    \verb https://www.ibm.com/developerworks/library/j-java-streams-3-brian-goe
+    \verb https://www.ibm.com/developerworks/library/j-java-streams-1-brian-goe
     \verb tz/index.html
     \endverb
     \field{version}{8}
     \field{month}{02}
     \field{year}{2016}
+  \endentry
+
+  \entry{expression_state}{online}{}
+    \list{organization}{1}{%
+      {LogicBig}%
+    }
+    \field{labeltitlesource}{title}
+    \field{sortinit}{J}
+    \field{sortinithash}{J}
+    \field{subtitle}{Stateful vs Stateless behavioral parameters}
+    \field{title}{Java 8 Streams}
+    \verb{url}
+    \verb http://www.logicbig.com/tutorials/core-java-tutorial/java-util-stream
+    \verb /stateful-vs-stateless/
+    \endverb
+    \field{month}{02}
+    \field{year}{2017}
   \endentry
 
   \entry{dzone_dangers}{online}{}
