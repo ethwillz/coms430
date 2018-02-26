@@ -1,4 +1,4 @@
-package parallel_streams_presentation;
+package parallel_streams_presentation.code_examples;
 
 import java.util.Arrays;
 import java.util.List;
@@ -9,10 +9,10 @@ import java.util.Optional;
  * the same amount of time. The difference is that while the long ooperation was being computed in the parallel stream,
  * no other Java app on the machine is able to use parallel streams."
  */
-public class DangersOfParallelStreams {
+public class DangersExamples {
 
     public static void main(String[] args){
-        DangersOfParallelStreams dops = new DangersOfParallelStreams();
+        DangersExamples dops = new DangersExamples();
         List<String> engines = Arrays.asList("https://www.google.com/?q=", "https://duckduckgo.com/?q=", "https://www.bing.com/search?q=");
 
         long start = System.nanoTime();

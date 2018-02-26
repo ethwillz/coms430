@@ -1,4 +1,4 @@
-package parallel_streams_presentation;
+package parallel_streams_presentation.code_examples;
 
 import java.util.Arrays;
 import java.util.List;
@@ -9,7 +9,6 @@ public class BasicParallelStreams {
         List<Person> students = Arrays.asList(new Person("Snoop", "Dogg", true),
                 new Person("Elon", "Musk", true),
                 new Person("Donald", "Trump", false),
-                new Person("Ivanka", "Trump", false),
                 new Person("Donald", "Glover", true));
 
         long start = System.nanoTime();

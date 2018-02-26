@@ -1,0 +1,163 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 2.8 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated as
+% required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+\sortlist[entry]{nty/global/}
+  \entry{collector_doc}{online}{}
+    \list{organization}{1}{%
+      {Oracle}%
+    }
+    \field{labeltitlesource}{title}
+    \field{sortinit}{C}
+    \field{sortinithash}{C}
+    \field{subtitle}{Java SE 8}
+    \field{titleaddon}{Oracle Help Center}
+    \field{title}{Collector}
+    \verb{url}
+    \verb https://docs.oracle.com/javase/8/docs/api/java/util/Collector.html
+    \endverb
+    \field{version}{8}
+    \field{year}{2017}
+  \endentry
+
+  \entry{ibm_uh_3}{online}{}
+    \name{author}{1}{}{%
+      {{hash=GB}{%
+         family={Goetz},
+         familyi={G\bibinitperiod},
+         given={Brian},
+         giveni={B\bibinitperiod},
+      }}%
+    }
+    \list{organization}{1}{%
+      {IBM}%
+    }
+    \strng{namehash}{GB1}
+    \strng{fullhash}{GB1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{G}
+    \field{sortinithash}{G}
+    \field{subtitle}{Java Streams, Part 3}
+    \field{titleaddon}{Understand java.util.stream internals}
+    \field{title}{Streams under the hood}
+    \verb{url}
+    \verb https://www.ibm.com/developerworks/library/j-java-streams-3-brian-goe
+    \verb tz/index.html
+    \endverb
+    \field{version}{8}
+    \field{month}{02}
+    \field{year}{2016}
+  \endentry
+
+  \entry{dzone_dangers}{online}{}
+    \name{author}{1}{}{%
+      {{hash=KL}{%
+         family={Krecan},
+         familyi={K\bibinitperiod},
+         given={Lucas},
+         giveni={L\bibinitperiod},
+      }}%
+    }
+    \list{organization}{1}{%
+      {DZone}%
+    }
+    \strng{namehash}{KL1}
+    \strng{fullhash}{KL1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{K}
+    \field{sortinithash}{K}
+    \field{title}{Think Twice Before Using Java 8 Parallel Streams}
+    \verb{url}
+    \verb https://dzone.com/articles/think-twice-using-java-8
+    \endverb
+    \field{month}{02}
+    \field{year}{2014}
+  \endentry
+
+  \entry{dzone_fjp}{online}{}
+    \name{author}{1}{}{%
+      {{hash=ND}{%
+         family={Newton},
+         familyi={N\bibinitperiod},
+         given={Dan},
+         giveni={D\bibinitperiod},
+      }}%
+    }
+    \list{organization}{1}{%
+      {DZone}%
+    }
+    \strng{namehash}{ND1}
+    \strng{fullhash}{ND1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{N}
+    \field{sortinithash}{N}
+    \field{title}{Common Fork Join Pool and Streams}
+    \verb{url}
+    \verb https://dzone.com/articles/common-fork-join-pool-and-streams
+    \endverb
+    \field{month}{02}
+    \field{year}{2017}
+  \endentry
+
+  \entry{custom_collector}{online}{}
+    \name{author}{1}{}{%
+      {{hash=NT}{%
+         family={Nurkiewicz},
+         familyi={N\bibinitperiod},
+         given={Tomasz},
+         giveni={T\bibinitperiod},
+      }}%
+    }
+    \list{organization}{2}{%
+      {Tomasz Nurkiewicz around Java}%
+      {Concurrency}%
+    }
+    \strng{namehash}{NT1}
+    \strng{fullhash}{NT1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{N}
+    \field{sortinithash}{N}
+    \field{title}{Introduction to Writing Custom Collectors in Java 8}
+    \verb{url}
+    \verb http://www.nurkiewicz.com/2014/07/introduction-to-writing-custom.html
+    \endverb
+    \field{month}{07}
+    \field{year}{2014}
+  \endentry
+
+  \entry{parallelism_doc}{online}{}
+    \list{organization}{1}{%
+      {Oracle}%
+    }
+    \field{labeltitlesource}{title}
+    \field{sortinit}{P}
+    \field{sortinithash}{P}
+    \field{subtitle}{The Java™ Tutorials}
+    \field{title}{Parallelism}
+    \verb{url}
+    \verb https://docs.oracle.com/javase/tutorial/collections/streams/paralleli
+    \verb sm.html
+    \endverb
+    \field{version}{8}
+    \field{year}{2017}
+  \endentry
+\endsortlist
+\endinput

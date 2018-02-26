@@ -1,4 +1,4 @@
-package parallel_streams_presentation;
+package parallel_streams_presentation.code_examples;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -12,7 +12,7 @@ import java.util.stream.StreamSupport;
  *
  * https://docs.oracle.com/javase/8/docs/api/java/util/Spliterator.html
  */
-public class SpliteratorImplementationExamples<E> implements List<E> {
+public class SpliteratorExamples<E> implements List<E> {
     private final int DEFAULT_SIZE = 10;
     private int cursorIndex;
     private E arr[];
@@ -21,7 +21,7 @@ public class SpliteratorImplementationExamples<E> implements List<E> {
         //Look into ArrayList's Spliterator
         ArrayList<String> thisHasNoFunctionalPurpose;
 
-        SpliteratorImplementationExamples<String> abl = new SpliteratorImplementationExamples<>();
+        SpliteratorExamples<String> abl = new SpliteratorExamples<>();
         abl.add("Hello");
         abl.add("Goodbye");
 
@@ -52,7 +52,7 @@ public class SpliteratorImplementationExamples<E> implements List<E> {
 
     }
 
-    public SpliteratorImplementationExamples(){
+    public SpliteratorExamples(){
         arr = (E[]) new Object[DEFAULT_SIZE];
         cursorIndex = 0;
     }
@@ -200,9 +200,9 @@ public class SpliteratorImplementationExamples<E> implements List<E> {
 
         private int currentIndex = 0;
 
-        private SpliteratorImplementationExamples<E> arr;
+        private SpliteratorExamples<E> arr;
 
-        public ArrayBackedListSpliterator(SpliteratorImplementationExamples<E> arr){
+        public ArrayBackedListSpliterator(SpliteratorExamples<E> arr){
             this.arr = arr;
         }
 
