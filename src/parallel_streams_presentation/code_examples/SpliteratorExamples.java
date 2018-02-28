@@ -1,232 +1,92 @@
 package parallel_streams_presentation.code_examples;
 
-import java.util.*;
-import java.util.function.Consumer;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.Spliterators;
 import java.util.stream.StreamSupport;
 
+public class SpliteratorExamples{
 
-/**
- * This is a mock data structure which is a basic array-backed list implementation. The purpose is to illustrate some
- * of the different ways to implement Spliterators, outlined in the spliterator method.
- * @param <E> Type of data to hold in list
- *
- * https://docs.oracle.com/javase/8/docs/api/java/util/Spliterator.html
- */
-public class SpliteratorExamples<E> implements List<E> {
-    private final int DEFAULT_SIZE = 10;
-    private int cursorIndex;
-    private E arr[];
+    public static void main(String[] args) throws Exception {
+        String temp;
+        ArrayList<String> list = new ArrayList<>();
+        File f = new File("/Users/ethwillz/Desktop/coms430/src/parallel_streams_presentation/code_examples/random_strings_10000.txt");
+        BufferedReader reader = new BufferedReader(new FileReader(f));
+        while((temp = reader.readLine()) != null){
+            list.add(temp);
+        }
 
-    public static void main(String[] args){
-        //Look into ArrayList's Spliterator
-        ArrayList<String> thisHasNoFunctionalPurpose;
 
-        SpliteratorExamples<String> abl = new SpliteratorExamples<>();
-        abl.add("Hello");
-        abl.add("Goodbye");
+
+
+
+
+        list.stream()
+                .filter(x -> x.contains("a"))
+                .map(x -> x = x.substring(0, 10))
+                .count();
+
+        list.stream()
+                .parallel()
+                .filter(x -> x.contains("a"))
+                .map(x -> x = x.substring(0, 10))
+                .count();
+
+        StreamSupport.stream(Spliterators.spliteratorUnknownSize(list.listIterator(), 0), true)
+                .filter(x -> x.contains("a"))
+                .map(x -> x = x.substring(0, 10))
+                .count();
+
+        StreamSupport.stream(Spliterators.spliterator(list.listIterator(), list.size(), 0), true)
+                .filter(x -> x.contains("a"))
+                .map(x -> x = x.substring(0, 10))
+                .count();
+
+        list.stream()
+                .unordered()
+                .parallel()
+                .filter(x -> x.contains("a"))
+                .map(x -> x = x.substring(0, 10))
+                .count();
+
+
+
 
         long start = System.nanoTime();
-        StreamSupport.stream(abl.spliterator(), false).anyMatch(e -> e.equals("Hello"));
+        long officialCount = ;
         long deltaT = System.nanoTime() - start;
-        System.out.println("Serial stream w/ null trySplit() took " + deltaT / 1000000 + "." + Long.toString(deltaT % 1000000).substring(0, 2) + " ms\n");
+        System.out.println("Serial stream took " + deltaT / 1000000 + "." + Long.toString(deltaT % 1000000).substring(0, 2) + " ms\n");
 
         start = System.nanoTime();
-        StreamSupport.stream(Spliterators.spliteratorUnknownSize(abl.listIterator(), 0), false).anyMatch(e -> e.equals("Hello"));
+        if( != officialCount)
+            throw new Exception("Results from streams are different");
         deltaT = System.nanoTime() - start;
-        System.out.println("Serial stream w/ spliteratorUnknownSize took " + deltaT / 1000000 + "." + Long.toString(deltaT % 1000000).substring(0, 2) + " ms\n");
+        System.out.println("Parallel stream took " + deltaT / 1000000 + "." + Long.toString(deltaT % 1000000).substring(0, 2) + " ms\n");
 
         start = System.nanoTime();
-        StreamSupport.stream(Spliterators.spliteratorUnknownSize(abl.listIterator(), 0), true).anyMatch(e -> e.equals("Hello"));
+        if(
+            throw new Exception("Results from streams are different");
         deltaT = System.nanoTime() - start;
         System.out.println("Parallel stream w/ spliteratorUnknownSize took " + deltaT / 1000000 + "." + Long.toString(deltaT % 1000000).substring(0, 2) + " ms\n");
 
         start = System.nanoTime();
-        StreamSupport.stream(Spliterators.spliterator(abl.listIterator(), abl.size(), 0), false).anyMatch(e -> e.equals("Hello"));
-        deltaT = System.nanoTime() - start;
-        System.out.println("Serial stream w/ known-size spliterator took " + deltaT / 1000000 + "." + Long.toString(deltaT % 1000000).substring(0, 2) + " ms\n");
-
-        start = System.nanoTime();
-        StreamSupport.stream(Spliterators.spliterator(abl.listIterator(), abl.size(), 0), true).anyMatch(e -> e.equals("Hello"));
+        if( != officialCount)
+            throw new Exception("Results from streams are different");
         deltaT = System.nanoTime() - start;
         System.out.println("Parallel stream w/ known-size spliterator took " + deltaT / 1000000 + "." + Long.toString(deltaT % 1000000).substring(0, 2) + " ms\n");
 
+        start = System.nanoTime();
+        if(list.stream()
+                .unordered()
+                .parallel()
+                .filter(x -> x.contains("a"))
+                .map(x -> x = x.substring(0, 10))
+                .count() != officialCount)
+            throw new Exception("Results from streams are different");
+        deltaT = System.nanoTime() - start;
+        System.out.println("Unordered parallel stream took " + deltaT / 1000000 + "." + Long.toString(deltaT % 1000000).substring(0, 2) + " ms\n");
     }
 
-    public SpliteratorExamples(){
-        arr = (E[]) new Object[DEFAULT_SIZE];
-        cursorIndex = 0;
-    }
-
-    @Override
-    public int size() { return cursorIndex; }
-
-    @Override
-    public boolean isEmpty() { return cursorIndex == 0; }
-
-    @Override
-    public boolean contains(Object o) {
-        for(int i = 0; i < cursorIndex; i++)
-            if(o.equals(arr[cursorIndex])) return true;
-        return false;
-    }
-
-    @Override
-    public Iterator<E> iterator() {
-        return null;
-    }
-
-    @Override
-    public Object[] toArray() {
-        return Arrays.stream(arr).limit(cursorIndex).toArray();
-    }
-
-    @Override
-    public <T> T[] toArray(T[] a) {  return null; }
-
-    public boolean add(E data){
-        if(cursorIndex + 1 == arr.length) {
-            E nextArr[] = (E[]) new Object[arr.length * 2];
-            for (int i = 0; i < arr.length; i++) { nextArr[i] = arr[i]; }
-            arr = nextArr;
-        }
-        arr[cursorIndex++] = data;
-        return true;
-    }
-
-    @Override
-    public boolean remove(Object o) { return false; }
-
-    @Override
-    public boolean containsAll(Collection<?> c) { return false; }
-
-    @Override
-    public boolean addAll(Collection<? extends E> c) { return false; }
-
-    @Override
-    public boolean addAll(int index, Collection<? extends E> c) { return false; }
-
-    @Override
-    public boolean removeAll(Collection<?> c) { return false; }
-
-    @Override
-    public boolean retainAll(Collection<?> c) { return false; }
-
-    @Override
-    public void clear() { }
-
-    @Override
-    public boolean equals(Object o) { return false; }
-
-    @Override
-    public int hashCode() { return 0; }
-
-    @Override
-    public E get(int index) {
-        if(index > arr.length) throw new ArrayIndexOutOfBoundsException();
-        return arr[index];
-    }
-
-    @Override
-    public E set(int index, E element) { return null; }
-
-    @Override
-    public void add(int index, E element) {  }
-
-    @Override
-    public E remove(int index) { return null; }
-
-    @Override
-    public int indexOf(Object o) { return 0; }
-
-    @Override
-    public int lastIndexOf(Object o) { return 0; }
-
-    @Override
-    public ListIterator<E> listIterator() {
-        return new ListIterator<E>() {
-            private int currentIndex = 0;
-
-            @Override
-            public boolean hasNext() {
-                if (currentIndex == arr.length || arr[currentIndex] == null) return false;
-                return true;
-            }
-
-            @Override
-            public E next() {
-                return arr[currentIndex];
-            }
-
-            @Override
-            public boolean hasPrevious() { return false; }
-
-            @Override
-            public E previous() { return null; }
-
-            @Override
-            public int nextIndex() { return 0; }
-
-            @Override
-            public int previousIndex() {  return 0; }
-
-            @Override
-            public void remove() { }
-
-            @Override
-            public void set(E e) { }
-
-            @Override
-            public void add(E e) { }
-        };
-    }
-
-    @Override
-    public ListIterator<E> listIterator(int index) { return null; }
-
-    @Override
-    public List<E> subList(int fromIndex, int toIndex) { return null; }
-
-    public E remove(){
-        if(cursorIndex == 0) throw new ArrayIndexOutOfBoundsException();
-        return arr[cursorIndex--];
-    }
-
-    @Override
-    public Spliterator<E> spliterator() {
-        return new ArrayBackedListSpliterator<>(this);
-    }
-
-    final class ArrayBackedListSpliterator<E> implements Spliterator<E>{
-
-        private int currentIndex = 0;
-
-        private SpliteratorExamples<E> arr;
-
-        public ArrayBackedListSpliterator(SpliteratorExamples<E> arr){
-            this.arr = arr;
-        }
-
-        @Override
-        public boolean tryAdvance(Consumer action) {
-            E next = arr.get(currentIndex);
-            currentIndex++;
-            action.accept(next);
-            return true;
-        }
-
-        @Override
-        public Spliterator trySplit() {
-            return null;
-        }
-
-        @Override
-        public long estimateSize() {
-            return 0;
-        }
-
-        @Override
-        public int characteristics() {
-            return 0;
-        }
-    }
 }

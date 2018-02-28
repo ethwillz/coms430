@@ -62,30 +62,33 @@ Some of the vocabulary in the paper may be unfamiliar to those with a knowledge 
 \end{itemize}
 
 \section{Introduction}
-Parallel streams were introduced into Java 8 alongside serial streams so that developers could utilize concurrency in order to more efficiently utilize modern multiprocessor design \autocite{ibm_streams}. In the case of parallel streams, each thread handles a different part of the stream and assemble all the parts together when the stream is serialized \autocite{parallelism_doc}
+Parallel streams were introduced into Java 8 alongside serial streams so that developers could utilize concurrency in order to more efficiently utilize modern multiprocessor design \autocite{ibm_streams}. Making a serial stream into a parallel stream is as easy as calling \verb|parallel()| after \verb|stream()|. In order for the \verb|parallel()| method to be applicable on the stream, the source \verb|Collection| must have an implementation of a \verb|Spliterator| \autocite{ibm_streams}. A \verb|Spliterator| object breaks up the original stream into parts which are each handled by a new thread from the JVM's common pool, illustrated in Figure \ref{fig:overview}. The substreams are then assembled and computed based on the bahavior of the terminal operation.
 
-Making a serial stream into a parallel stream is as easy as calling \verb|parallel()| after \verb|stream()|. In order for the \verb|parallel()| method to be applicable on the stream, the \verb|Collection| must have an implementation of a \verb|Spliterator| \autocite{ibm_streams}, an object which can effectively break up a collection to be processed separately. 
+\begin{figure}[H]
+\centering
+\includegraphics[width=13cm]{../images/overview.png}
+\caption{Overview of a Parallel Stream}
+\source{Ethan Williams}
+\label{fig:overview}
+\end{figure}
 
-Several operations are more essential to parallel streams, as is the case with \verb|Collector|s. Calling the \verb|collect()| method on the stream will reduce and serialize it based on the behavior of the \verb|Collector| object passed as an argument \autocite{collector_doc}. With parallel streams, \verb|Collector|s are the recommended strategy for reduction because other mechanisms that can be used in serial streams will result in inconsistent results when run in parallel. The reason for this is discussed in Section \ref{stateful_expressions}.
+There are several terminal operations for a parallel stream, but the \verb|collect()| method is the most reliable form of reduction. The method uses a \verb|Collector| to reduce the stream, an object that defines how input elements should be added to a given data structure. This document will focus on the \verb|Collector|'s functionality and implementation, finishing with an explanation of special use cases for parallel streams.
 
 Despite parallel streams being introduced into Java to simplify concurrency, developers can easily corrupt data and cause system bugs. All possible bugs in streams derive from developers not following standard concurrency practices such as using long-running or blocking operations in streams. Additionally, considerations have to be taken with streams specifically to avoid interference with the source and using stateful expressions.
 
 \section{Spliterator}
-{\itshape \verb|Spliterator| implementations differ based on the type of source collection, so this section focuses on a modified implementation for Java's \verb|ArrayList|}.
-\newline
-
-The \verb|Spliterator| is the backbone of parallel streams, allowing the program to split a collection apart (illustrated in Figure \ref{fig:split}) and iterate through it. If a class extending a \verb|Collection| does not have a \verb|spliterator()| method returning a \verb|Spliterator| object, then Java is not able to process the collection with a parallel stream at all. In many implementations including the one used in this paper, each instance has a source collection, an index, and a fence. The backing collection for each instance is the entire collection it is based on which ensures every instance has a consistent copy of the source. The index is the current cursor position of the \verb|Spliterator|, which is analogous to the cursor position in an \verb|Iterator| object. The fence is the index of the last element the Spliterator is responsible for plus one.
+The \verb|Spliterator| is the backbone of parallel streams, allowing the program to split a collection apart (illustrated in Figure \ref{fig:split}) and iterate through it. If a class extending a \verb|Collection| does not have a \verb|spliterator()| method returning a \verb|Spliterator| object, then Java is not able to process the collection with a parallel stream at all. Figure \ref{fig:split} shows how an instance may behave when it splits itself. It is worth noting that the splitting doesn't actually break up the collection. \verb|Spliterator|s share the collection and simply keep track of what element it is currently iterating on (index) and one more than the last element it is allowed to execute with (fence).
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=8cm]{images/spliterator_illustrated.png}
+\includegraphics[width=8cm]{../images/spliterator.png}
 \caption{A Spliterator Before and After Splitting}
 \source{Ethan Williams}
 \label{fig:split}
 \end{figure}
 
 \subsection{Implementation} 
-Although the cursor is similar to \verb|Iterator|'s, traversal through a Spliterator using \verb|tryEachRemaining()| and \verb|tryNext()| is different. \verb|tryEachRemaining()| in Figure \ref{fig:forEachRemaining} takes a Consumer object which is the operation to be executed on each element of the collection. A typical implementation will simply iterate through all elements and call the \verb|accept()| method on the consumer with the element as its only parameter. \verb|tryNext()| in Figure \ref{fig:tryAdvance} is similar although the operation is only attempted on element at the current cursor position. If that cursor position is past the fence of the Spliterator, then the method returns false, otherwise it returns true.
+A \verb|Spliterator| must be able to traverse and split the portion of the stream it represents. \verb|tryEachRemaining()| and \verb|tryNext()| are the two methods which dictate how traversal is handled for the collection. \verb|tryEachRemaining()| in Figure \ref{fig:forEachRemaining} takes a Consumer object which is the operation to be executed on each element of the collection. The example simply iterates through each element and uses it as a parameter to the \verb|accept()| method of the \verb|Consumer| object. \verb|tryNext()| in Figure \ref{fig:tryAdvance} is similar although the operation is only attempted on element at the current cursor position. If that cursor position is past the fence of the Spliterator, then the method returns false, otherwise it returns true.
 
 \begin{figure}[H]
 \centering
@@ -121,7 +124,7 @@ public boolean tryAdvance(Consumer<? super E> action) {
 \label{fig:tryAdvance}
 \end{figure}
 
-\verb|Spliterator|'s primary functionality is encapsulated within the \verb|trySplit()| method in Figure \ref{fig:trySplit}. This method is called when the JVM wants to break the source collection in order to start processing the stream on another thread and if implemented incorrectly can be a subtle but important error in an application \autocite{}. The example implementation simply finds the midpoint and either returns a new \verb|Spliterator| from the cursor to the midpoint and the current instance of \verb|Spliterator| now covers mid to the fence. The example \verb|trySplit()| method is the code behind the split behavior illustrated in Figure \ref{fig:split}.
+A \verb|Spliterator|'s primary functionality is encapsulated within the \verb|trySplit()| method in Figure \ref{fig:trySplit}. This method is called when the JVM wants to break the source collection in order to start processing the stream on another thread and if implemented incorrectly can be a subtle but important error in an application \autocite{}. The example implementation simply finds the midpoint and either returns a new \verb|Spliterator| from the cursor to the midpoint and the current instance of \verb|Spliterator| now covers mid to the fence. The example \verb|trySplit()| method is the code behind the split behavior illustrated in Figure \ref{fig:split}.
 
 \begin{figure}[H]
 \centering
@@ -137,11 +140,103 @@ public Spliterator<E> trySplit() {
 \end{figure}
 
 \section{Collector}
-A \verb|Collector| object defines a mutable reduction operation for a group of input elements and is used in a stream with the \verb|collect()| method \autocite{}. In other words, instances reduce a stream into a data structure which may be different than the source. In the code example in Figure \ref{fig:employee_collection} groups employees by department into a \verb|Map| object with the department as the key and a list of employees in that department as a value. \verb|Collector|s can be used on both serial and parallel streams, though using the general reduction method \verb|reduce()| is harder to use correctly with parallel streams since ordering is not guaranteed. To utilize \verb|Collector|s in streams, developers can either use one of the many methods of the \verb|Collectors| class such as \verb|groupingByConcurrent()| or write their own \verb|Collector| for custom behavior.
+A \verb|Collector| object defines a mutable reduction operation for a group of input elements, in other words, it provides information on how to instantiate a data structure and perform several operations on it. Its functionality is encompassed in 4 methods (illustrated in Figure \ref{fig:collector}):
+
+\begin{itemize}
+\item \verb|supplier()| provides information on how to construct a new instance of the desired data structure
+\item \verb|accumulator()| details how to add any given element to the data structure
+\item \verb|combine()| method simply assembles multiple instances of the data structure
+\item \verb|finisher()| method simply serializes the stream, completing the reduction
+\end{itemize}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=13cm]{../images/collector.png}
+\caption{How a Collector is Used}
+\source{Ethan Williams}
+\label{fig:collector}
+\end{figure}
+
+\verb|Collector| objects are used during a reduction operation to join substreams together in the form of the data structure defined by the instance. Java has a static class called \verb|Collectors| which provide basic reduction instances via method calls. For example \verb|Collectors.toMap()| returns a \verb|Collector| instance which reduces the stream to a \verb|Map|. 
+
+\subsection{Implementation}
+
+A \verb|Collector| object has four methods which comprise the majority of its functionality: \verb|supplier()|, \verb|accumulator()|, \verb|combiner()|, \& \verb|finisher()| \autocite{collector_doc}. The examples below are a \verb|Collector| which will yield an \verb|ImmutableSet| when used.
+
+The \verb|supplier()| method returns a mechanism to build an instance of a mutable data structure that will hold the elements of the stream called an \textit{accumulator} \autocite{custom_collector}, in our code example this is a builder for \verb|ImmutableSet|.
 
 \begin{figure}[H]
 \centering
 \begin{lstlisting}[language=Java]
+public Supplier<ImmutableSet.Builder<T>> supplier() {
+    return ImmutableSet::builder;
+}
+\end{lstlisting}
+\caption{Implementation of supplier()}
+\source{Ethan Williams}
+\label{fig:supplier}
+\end{figure}
+
+The \verb|accumulator()| method takes an accumulator and an element as parameters and will return a \verb|Consumer| object which details how the element should be added to the accumulator. In the example a \verb|BiConsumer| object will add the element to the given \verb|ImmutableSet|.
+
+\begin{figure}[H]
+\centering
+\begin{lstlisting}[language=Java]
+public BiConsumer<ImmutableSet.Builder<T>, T> accumulator() {
+    return (builder, t) -> builder.add(t);
+}
+\end{lstlisting}
+\caption{Implementation of accumulator()}
+\source{Ethan Williams}
+\label{fig:accumulator}
+\end{figure}
+
+The \verb|combiner()| method details the logic on how two accumulators should be joined together and is used to assemble all instances of the new data structure that were derived from substreams. In the code example the \verb|combiner()|'s behavior is that when two \verb|ImmutableSet|s are combined, one is simply appended to the other.
+
+\begin{figure}[H]
+\centering
+\begin{lstlisting}[language=Java]
+public BinaryOperator<ImmutableSet.Builder<T>> combiner() {
+    return (left, right) -> {
+        left.addAll(right.build());
+        return left;
+    };
+}
+\end{lstlisting}
+\caption{Implementation of combiner()}
+\source{Ethan Williams}
+\label{fig:combiner}
+\end{figure}
+
+Finally, the \verb|finisher()| method serializes the accumulator that is the result of combining all the substreams, completing the reduction. In the code example, this is as easy as returning the \verb|build()| method which serializes the \verb|ImmutableSet|, completing the conversion of the source.
+
+\begin{figure}[H]
+\centering
+\begin{lstlisting}[language=Java]
+public Function<ImmutableSet.Builder<T>, ImmutableSet<T>> finisher() {
+    return ImmutableSet.Builder::build;
+}
+\end{lstlisting}
+\caption{Implementation of finisher()}
+\source{Ethan Williams}
+\label{fig:finisher}
+\end{figure}
+
+\subsection{Special Uses for Parallelism}
+Although the \verb|collect()| method can be used on both serial and parallel streams, Java also includes special \verb|Collector| instances for better parallel performance. For example, Figure \ref{fig:employee_collection} has the same collect operation on a parallel stream, one reduces with the \verb|groupingBy()| method and the other reduces with the \verb|groupingByConcurrent()| method. Even though both are parallel, the second example runs significantly faster because the reduction can be parallelized by using a \verb|ConcurrentMap|. The first example processes each element in parallel, but the reduction is to a non-thread-safe data structure, limiting the potential benefits of parallelism.
+
+\begin{figure}[H]
+\centering
+\begin{lstlisting}[language=Java]
+// Example 1
+ConcurrentHashMap<Department, List<Employee>> byDept
+    = employees.stream()
+               .parallel()
+               .collect(Collectors
+                  .groupingBy(Employee::getDepartment)
+                );
+                
+// Example 2
 Map<Department, List<Employee>> byDept
     = employees.stream()
                .parallel()
@@ -153,26 +248,6 @@ Map<Department, List<Employee>> byDept
 \source{Ethan Williams}
 \label{fig:employee_collection}
 \end{figure}
-
-\subsection{Implementation}
-
-A \verb|Collector| object has four methods which comprise the majority of its functionality: \verb|supplier()|, \verb|accumulator()|, \verb|combiner()|, \& \verb|finisher()| \autocite{collector_doc}. The functionality of each method is shown in Figure \ref{collector} and a code example in Figure \ref{fig:collector_impl}, Appendix A shows a basic implementation which reduces a stream into an \verb|ImmutableSet|.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=13cm]{images/collector.png}
-\caption{How a Collector is Used}
-\source{Ethan Williams}
-\label{fig:collector}
-\end{figure}
-
-The \verb|supplier()| method returns a mechanism to build an instance of a mutable data structure that will hold the elements of the stream which is known as the \textit{accumulator} \autocite{custom_collector}. Behind the scenes, the JVM will call this method several times to create \verb|ImmutableSet|s for all of the substreams \autocite{}.  In the code example our \verb|supplier()| is simply an \verb|ImmutableSet| builder so the JVM can generate new instances at will.
-
-The \verb|accumulator()| method takes an accumulator and an element as parameters and will return a \verb|Consumer| object which details how the element should be added to the accumulator. The JVM uses this when of any element in the substream is done with processing to determine how or if it's added to the final data structure. In the code example, the \verb|accumulator| simply appends the element to the end of the \verb|ImmutableSet|.
-
-The \verb|combiner()| method details the logic on how two accumulators should be joined together and is used to assemble all instances of the new data structure that were derived from substreams. In the code example the \verb|combiner()|'s behavior is that when two \verb|ImmutableSet|s are combined, one is simply appended to the other.
-
-Finally, the \verb|finisher()| method serializes the accumulator that is the result of combining all the substreams, finishing the reduction. In the code example, this is as easy as returning the \verb|build()| method which serializes the \verb|ImmutableSet|, completing the conversion of the source.
 
 \section{Practical Considerations when Using Parallel Streams}
 Parallel streams were introduced to make implementing parallelism in a Java application easier, but with this ease comes common pitfalls that arise from the abstraction. For example, a common mistake is using long-running or blocking operations in a stream which is a bad concurrency practice to begin with. Additionally, many developers aren't familiar with interference and stateful expressions which can lead to severe errors in the application.
@@ -197,16 +272,6 @@ Optional<String> result = customPool.submit(() -> collection.stream().parallel()
 \caption{Reduction of employees into map by a Collector}
 \source{Ethan Williams}
 \label{fig:network_op}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\begin{lstlisting}[language=Java]
-
-\end{lstlisting}
-\caption{Reduction of employees into map by a Collector with custom Thread Pool}
-\source{Ethan Williams}
-\label{fig:custom_pool}
 \end{figure}
 
 \subsection{Interference}
@@ -237,43 +302,5 @@ collection.stream().parallel().map(x -> parallelSotrage.add(x)).forEachOrdered(x
 \end{figure}
  
 \printbibliography[heading=bibintoc]
-
-\appendix
-\section{\\Code Example from Section 3.2}
-\begin{figure}[H]
-\centering
-\begin{lstlisting}[language=Java]
-import com.google.common.collect.ImmutableSet;
- 
-public class ImmutableSetCollector<T> 
-        implements Collector<T, ImmutableSet.Builder<T>, ImmutableSet<T>> {
-    @Override
-    public Supplier<ImmutableSet.Builder<T>> supplier() {
-        return ImmutableSet::builder;
-    }
- 
-    @Override
-    public BiConsumer<ImmutableSet.Builder<T>, T> accumulator() {
-        return (builder, t) -> builder.add(t);
-    }
- 
-    @Override
-    public BinaryOperator<ImmutableSet.Builder<T>> combiner() {
-        return (left, right) -> {
-            left.addAll(right.build());
-            return left;
-        };
-    }
- 
-    @Override
-    public Function<ImmutableSet.Builder<T>, ImmutableSet<T>> finisher() {
-        return ImmutableSet.Builder::build;
-    }
-}
-\end{lstlisting}
-\caption{Custom Collector }
-\source{\autocite{custom_collector}}
-\label{fig:collector_impl}
-\end{figure}
 
 \end{document}

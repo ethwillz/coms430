@@ -1,5 +1,9 @@
 package parallel_streams_presentation.code_examples;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -11,32 +15,29 @@ import java.util.Optional;
  */
 public class DangersExamples {
 
-    public static void main(String[] args){
+    public static void main(String[] args) throws Exception{
+        String temp;
         DangersExamples dops = new DangersExamples();
-        List<String> engines = Arrays.asList("https://www.google.com/?q=", "https://duckduckgo.com/?q=", "https://www.bing.com/search?q=");
+        ArrayList<String> list = new ArrayList<>();
+        File f = new File("/Users/ethwillz/Desktop/coms430/src/parallel_streams_presentation/code_examples/random_strings_10000.txt");
+        BufferedReader reader = new BufferedReader(new FileReader(f));
+        while((temp = reader.readLine()) != null){
+            list.add(temp);
+        }
 
         long start = System.nanoTime();
-        dops.queryWithLongNetworkOperationSerial(engines, "coms430");
+        list.stream().map(x -> longOperation()).findAny();
         long deltaT = System.nanoTime() - start;
-        System.out.println("In Serial: " + deltaT / 1000000 + "." + deltaT % 1000000 + "ms");
+        System.out.println("In Serial: " + deltaT / 1000000000 + "." + deltaT % 1000000000 + " ms");
 
         start = System.nanoTime();
-        dops.queryWithLongNetworkOperationParallel(engines, "coms430");
+        list.stream().parallel().map(x -> longOperation()).findAny();
         deltaT = System.nanoTime() - start;
-        System.out.println("In parallel: " + (System.nanoTime() - start) / 1000000 + "." + Long.toString(deltaT % 1000000).substring(0, 2) + "ms");
+        System.out.println("In parallel: "
+                + (System.nanoTime() - start) / 1000000000 + "." + Long.toString(deltaT % 1000000000).substring(0, 2) + " ms");
     }
 
-    public String queryWithLongNetworkOperationParallel(List<String> engines, String query){
-        Optional<String> result = engines.stream().map((base) -> longOperation(base + query)).findAny();
-        return result.orElse(null);
-    }
-
-    public String queryWithLongNetworkOperationSerial(List<String> engines, String query){
-        Optional<String> result = engines.stream().map((base) -> longOperation(base + query)).findAny();
-        return result.orElse(null);
-    }
-
-    private String longOperation(String url){
+    private static String longOperation(){
         try {
             Thread.sleep(3500);
         } catch (InterruptedException e) {

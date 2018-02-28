@@ -16,12 +16,33 @@ public class BasicParallelStreams {
     //   stream            intermediate                terminal
     //    source            operations                  operation
     //  |-------|---------------------------------|----------------------------------------------------------------------------------------|
-        students.stream().filter(Person::isGenius).forEach(person -> System.out.println(person.getFirstName() + " " + person.getLastName()));
+
+
+
+
+        students.stream()
+                .filter(Person::hasJob)
+                .forEach(person -> System.out.println(person.getFirstName() + " " + person.getLastName()));
+
+
+
+        students.stream()
+                .parallel()
+                .filter(Person::hasJob)
+                .forEach(person -> System.out.println(person.getFirstName() + " " + person.getLastName()));
+
+        students.parallelStream()
+                .filter(Person::hasJob)
+                .forEach(person -> System.out.println(person.getFirstName() + " " + person.getLastName()));
+
+
+
+
         long deltaT = System.nanoTime() - start;
         System.out.println("Serial stream took " + deltaT / 1000000 + "." + Long.toString(deltaT % 1000000).substring(0, 2) + " ms\n");
 
         start = System.nanoTime();
-        students.parallelStream().filter(Person::isGenius).forEach(person -> System.out.println(person.getFirstName() + " " + person.getLastName()));
+        //students.parallelStream().filter(Person::isGenius).forEach(person -> System.out.println(person.getFirstName() + " " + person.getLastName()));
         deltaT = System.nanoTime() - start;
         System.out.println("Parallel stream took " + deltaT / 1000000 + "." + Long.toString(deltaT % 1000000).substring(0, 2) + " ms");
     }
@@ -46,7 +67,7 @@ class Person {
         return lastName;
     }
 
-    public boolean isGenius(){
+    public boolean hasJob(){
         return isGenius;
     }
 }
