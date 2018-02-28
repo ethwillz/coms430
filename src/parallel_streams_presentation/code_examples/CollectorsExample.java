@@ -11,7 +11,7 @@ public class CollectorsExample {
     public static void run(ArrayList<Employee> employees){
         employees.stream()
                 .parallel()
-                .filter(x -> x.getDepartment().equals("accounting"))
+                .filter(x -> x.getDepartment().equals("keep"))
                 .limit(10000)
                 .collect(Collectors.groupingByConcurrent(Employee::getDepartment));
     }

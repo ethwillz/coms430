@@ -1,18 +1,21 @@
 package parallel_streams_presentation.code_examples;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class runner {
     public static void main(String[] args) {
         ArrayList<Employee> employees = new ArrayList<>();
-        char begin = 'a';
+        Random r = new Random();
+        String dept = "keep";
         char name = 'a';
         for(int i = 0; i < 26; i++){
             for(int j = 0; j < 100000000; j++){
-                employees.add(new Employee(begin, name));
+                employees.add(new Employee(null, name));
                 name++;
+                if(r.nextInt() % 10 < 5) dept = random;
             }
-            begin++;
+            //begin++;
         }
 
         long start = System.nanoTime();
