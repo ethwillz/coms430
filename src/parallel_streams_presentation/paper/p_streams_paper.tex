@@ -44,6 +44,8 @@
 
 \tableofcontents
 
+\pagebreak
+
 \setcounter{section}{-1}
 \section{Prerequisites}
 
@@ -55,10 +57,16 @@ Additionally, functional knowledge of \verb|java.util.concurrent| and the \verb|
 \subsection{Vocabulary Clarification} \label{language}
 Some of the vocabulary in the paper may be unfamiliar to those with a knowledge of streams and are defined/clarified below:
 \begin{itemize}
+\item A stream is composed of 3 parts: 
+	\begin{itemize}
+	\item the \verb|Collection| the stream is built on is the \textit{source}
+	\item \textit{intermediate operations} such as \verb|map()| transforms but doesn't serialize the stream (see below for serialization definition) 
+	\item \textit{terminal operations} like \verb|toArray()| serialize the stream
+	\end{itemize}
 \item A stream instantiated with the \verb|stream()| method only is referred to as a \textit{serial stream}
-\item A stream instantiated with the \verb|parallel().stream()| or \verb|parallelStream()| methods is referred to as a \textit{parallel stream}
-\item \textit{Serializing data} refers to destroying the stream and bringing all collection items left in the stream into memory
-\item A stream is composed of 3 parts: a source which is the \verb|Collection| it is operating on, intermediate operations such as \verb|map()| which don't serialize data, and terminal operations like \verb|toArray()| which serialize the stream
+\item A stream instantiated with the \verb|parallel().stream()| or \verb|parallelStream()| method is referred to as a \textit{parallel stream}
+\item \textit{Serializing data} or \textit{serializing a stream} is the final step in a stream when references to the source are ditched and the new data structure is instantiated
+\item \textit{Stateful expressions} are lambda expressions passed as arguments to an intermediate operation which depends on the ordering of the input elements
 \end{itemize}
 
 \section{Introduction}
@@ -67,7 +75,7 @@ Parallel streams were introduced into Java 8 alongside serial streams so that de
 \begin{figure}[H]
 \centering
 \includegraphics[width=13cm]{../images/overview.png}
-\caption{Overview of a Parallel Stream}
+\caption{Overview of a parallel stream}
 \source{Ethan Williams}
 \label{fig:overview}
 \end{figure}
@@ -82,7 +90,7 @@ The \verb|Spliterator| is the backbone of parallel streams, allowing the program
 \begin{figure}[H]
 \centering
 \includegraphics[width=8cm]{../images/spliterator.png}
-\caption{A Spliterator Before and After Splitting}
+\caption{A {\tt Spliterator} Before and after splitting}
 \source{Ethan Williams}
 \label{fig:split}
 \end{figure}
@@ -94,14 +102,10 @@ A \verb|Spliterator| must be able to traverse and split the portion of the strea
 \centering
 \begin{lstlisting}[language=Java]
 public void forEachRemaining(Consumer<? super E> action) {
-    int i;
-    if ((i = index) >= 0 && (index = fence) <= a.length) {
-        for (; i < hi; ++i)  action.accept((E) list.elementData[i]);
-    }
-    throw new ConcurrentModificationException();
+        for (int i = index; i < fence; ++i)  action.accept((E) list.elementData[i]);
 }
 \end{lstlisting}
-\caption{Implementation of forEachRemaining()}
+\caption{Implementation of {\tt forEachRemaining()}}
 \source{Java ArrayList, modified by Ethan Williams}
 \label{fig:forEachRemaining}
 \end{figure}
@@ -110,16 +114,13 @@ public void forEachRemaining(Consumer<? super E> action) {
 \centering
 \begin{lstlisting}[language=Java]
 public boolean tryAdvance(Consumer<? super E> action) {
-    int hi = getFence(), i = index;
-    if (i < hi) {
-        index = i + 1;
-        action.accept((E) list.elementData[i]);
-        return true;
-    }
-    return false;
+    if(i == fence) return false;
+    index++;
+    action.accept((E) list.elementData[i]);
+    return true;
 }
 \end{lstlisting}
-\caption{Implementation of tryAdvance()}
+\caption{Implementation of {\tt tryAdvance()}}
 \source{Java ArrayList, modified by Ethan Williams}
 \label{fig:tryAdvance}
 \end{figure}
@@ -130,29 +131,29 @@ A \verb|Spliterator|'s primary functionality is encapsulated within the \verb|tr
 \centering
 \begin{lstlisting}[language=Java]
 public Spliterator<E> trySplit() {
-    int lo = index, mid = (lo + fence) >>> 1;
-    return (lo >= mid) ? null : new Spliterator<E>(list, lo, index = mid);
+    int mid = (index + fence) >>> 1;
+    return (index >= mid) ? null : new Spliterator<E>(list, index, index = mid);
 }
 \end{lstlisting}
-\caption{Implementation of trySplit()}
+\caption{Implementation of {\tt trySplit()}}
 \source{Java ArrayList, modified by Ethan Williams}
 \label{fig:trySplit}
 \end{figure}
 
 \section{Collector}
-A \verb|Collector| object defines a mutable reduction operation for a group of input elements, in other words, it provides information on how to instantiate a data structure and perform several operations on it. Its functionality is encompassed in 4 methods (illustrated in Figure \ref{fig:collector}):
+A \verb|Collector| object defines a mutable reduction operation for a group of input elements. In other words, it provides information on how to instantiate a data structure and perform several operations on it. Its functionality is encompassed in 4 methods (illustrated in Figure \ref{fig:collector}):
 
 \begin{itemize}
 \item \verb|supplier()| provides information on how to construct a new instance of the desired data structure
 \item \verb|accumulator()| details how to add any given element to the data structure
-\item \verb|combine()| method simply assembles multiple instances of the data structure
-\item \verb|finisher()| method simply serializes the stream, completing the reduction
+\item \verb|combine()| directs how to assemble multiple instances of the data structure
+\item \verb|finisher()|  simply serializes the stream, completing the reduction
 \end{itemize}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=13cm]{../images/collector.png}
-\caption{How a Collector is Used}
+\caption{How a {\tt Collector} is used}
 \source{Ethan Williams}
 \label{fig:collector}
 \end{figure}
@@ -161,7 +162,7 @@ A \verb|Collector| object defines a mutable reduction operation for a group of i
 
 \subsection{Implementation}
 
-A \verb|Collector| object has four methods which comprise the majority of its functionality: \verb|supplier()|, \verb|accumulator()|, \verb|combiner()|, \& \verb|finisher()| \autocite{collector_doc}. The examples below are a \verb|Collector| which will yield an \verb|ImmutableSet| when used.
+A \verb|Collector| object has four methods which comprise the majority of its functionality: \verb|supplier()|, \verb|accumulator()|, \verb|combiner()|, and \verb|finisher()| \autocite{collector_doc}. The examples below are a \verb|Collector| which will yield an \verb|ImmutableSet| when used.
 
 The \verb|supplier()| method returns a mechanism to build an instance of a mutable data structure that will hold the elements of the stream called an \textit{accumulator} \autocite{custom_collector}, in our code example this is a builder for \verb|ImmutableSet|.
 
@@ -172,8 +173,8 @@ public Supplier<ImmutableSet.Builder<T>> supplier() {
     return ImmutableSet::builder;
 }
 \end{lstlisting}
-\caption{Implementation of supplier()}
-\source{Ethan Williams}
+\caption{Implementation of {\tt supplier()}}
+\source{\autocite{custom_collector}}
 \label{fig:supplier}
 \end{figure}
 
@@ -186,8 +187,8 @@ public BiConsumer<ImmutableSet.Builder<T>, T> accumulator() {
     return (builder, t) -> builder.add(t);
 }
 \end{lstlisting}
-\caption{Implementation of accumulator()}
-\source{Ethan Williams}
+\caption{Implementation of {\tt accumulator()}}
+\source{\autocite{custom_collector}}
 \label{fig:accumulator}
 \end{figure}
 
@@ -203,8 +204,8 @@ public BinaryOperator<ImmutableSet.Builder<T>> combiner() {
     };
 }
 \end{lstlisting}
-\caption{Implementation of combiner()}
-\source{Ethan Williams}
+\caption{Implementation of {\tt combiner()}}
+\source{\autocite{custom_collector}}
 \label{fig:combiner}
 \end{figure}
 
@@ -217,8 +218,8 @@ public Function<ImmutableSet.Builder<T>, ImmutableSet<T>> finisher() {
     return ImmutableSet.Builder::build;
 }
 \end{lstlisting}
-\caption{Implementation of finisher()}
-\source{Ethan Williams}
+\caption{Implementation of {\tt finisher()}}
+\source{\autocite{custom_collector}}
 \label{fig:finisher}
 \end{figure}
 
@@ -244,13 +245,13 @@ Map<Department, List<Employee>> byDept
                   .groupingByConcurrent(Employee::getDepartment)
                 );
 \end{lstlisting}
-\caption{Reduction of employees into map by a Collector}
+\caption{Reduction of employees into map by a {\tt Collector}}
 \source{Ethan Williams}
 \label{fig:employee_collection}
 \end{figure}
 
 \section{Practical Considerations when Using Parallel Streams}
-Parallel streams were introduced to make implementing parallelism in a Java application easier, but with this ease comes common pitfalls that arise from the abstraction. For example, a common mistake is using long-running or blocking operations in a stream which is a bad concurrency practice to begin with. Additionally, many developers aren't familiar with interference and stateful expressions which can lead to severe errors in the application.
+Parallel streams were introduced to make implementing parallelism in a Java application easier, but with this ease comes common pitfalls that arise from the abstraction. For example, a common mistake is using long-running or blocking operations in a stream which is a bad concurrency practice to begin with. Additionally, many developers aren't familiar with stream-specific concurrency practices which can lead to bugs. These are known as  interference and use of stateful expressions and are extremely difficult to debug.
 
 \subsection{Long-Running/Blocking Operations}
 Using long-running or blocking operations in a stream will degrade performance drastically, a result of how streams implement threading. The JVM begins by processing on the calling thread and as more subtasks are broken off, the JVM gets threads from \verb|ForkJoinPool.common()|, which is a thread pool used in the background of the whole application \autocite{dzone_dangers}. 
@@ -269,13 +270,13 @@ Optional<String> result = collection.stream().parallel().map((base) -> longOpera
 ForkJoinPool customPool = new ForkJoinPool(4);
 Optional<String> result = customPool.submit(() -> collection.stream().parallel().map((arg) -> longOperation(arg)).findAny()).get();
 \end{lstlisting}
-\caption{Reduction of employees into map by a Collector}
+\caption{Reduction of employees into map by a {\tt Collector}}
 \source{Ethan Williams}
 \label{fig:network_op}
 \end{figure}
 
 \subsection{Interference}
-Since \verb|Stream|s don't contain any of the elements of the collection, instead storing references, if the source is modified then the reference is invalidated \autocite{ibm_streams}. Editing the source of the stream in an intermediate operation is called \textit{interference} and will throw a \verb|ConcurrentModificationException| \autocite{parallelism_doc}. The stream in figure \ref{fig:interference} attempts to add each element to the collection again using the \verb|map()| method. Since it attempts to modify the source before the stream has serialized, this operation will throw an exception.
+Since streams don't contain any of the elements of the collection, instead storing references, if the source is modified then the reference is invalidated \autocite{ibm_streams}. Editing the source of the stream in an intermediate operation is called \textit{interference} and will throw a \verb|ConcurrentModificationException| \autocite{parallelism_doc}. The stream in figure \ref{fig:interference} attempts to add each element to the collection again using the \verb|map()| method. Since it attempts to modify the source before the stream has serialized, this operation will throw an exception.
 
 \begin{figure}[H]
 \centering
@@ -288,7 +289,7 @@ collection.stream().parallel().map((x) -> collection.add(x)).toArray();
 \end{figure}
 
 \subsection{Stateful Expressions} \label{stateful_expressions}
-The third practice which will cause errors in a stream and should be watched carefully is using stateful expressions, which are operations that depends on the ordering of the elements \autocite{expression_state}. The code in Figure \ref{fig:stateful} shows an example of a stateful operation while attempting to add elements to \verb|parallelStorage| and print them. Although the \verb|forEachOrdered()| method is just fine and will print in the expected order, \verb|parallelStorage| will have a different ordering every time the stream is executed. The addition is stateful, meaning it depends on ordering and in parallel streams ordering can't be guaranteed in intermediate operations \autocite{parallelism_doc}.
+The third practice which will cause errors in a stream  is using stateful expressions, operations that depend on the ordering of the elements \autocite{expression_state}. The code in Figure \ref{fig:stateful} shows an example of a stateful operation while attempting to add elements to \verb|parallelStorage| and print them. Although the \verb|forEachOrdered()| method is just fine and will print in the expected order, \verb|parallelStorage| will have a different ordering every time the stream is executed. The addition is stateful, meaning it depends on ordering and in parallel streams ordering can't be guaranteed in intermediate operations \autocite{parallelism_doc}.
 
 \begin{figure}[H]
 \centering

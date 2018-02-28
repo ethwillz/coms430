@@ -28,13 +28,13 @@ public class DangersExamples {
         long start = System.nanoTime();
         list.stream().map(x -> longOperation()).findAny();
         long deltaT = System.nanoTime() - start;
-        System.out.println("In Serial: " + deltaT / 1000000000 + "." + deltaT % 1000000000 + " ms");
+        System.out.println("In Serial: " + deltaT / 1000000000 + "." + deltaT % 1000000000 + " s");
 
         start = System.nanoTime();
         list.stream().parallel().map(x -> longOperation()).findAny();
         deltaT = System.nanoTime() - start;
         System.out.println("In parallel: "
-                + (System.nanoTime() - start) / 1000000000 + "." + Long.toString(deltaT % 1000000000).substring(0, 2) + " ms");
+                + (System.nanoTime() - start) / 1000000000 + "." + Long.toString(deltaT % 1000000000).substring(0, 2) + " s");
     }
 
     private static String longOperation(){
