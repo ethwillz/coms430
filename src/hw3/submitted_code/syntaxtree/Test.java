@@ -1,4 +1,4 @@
-package hw3.syntaxtree;
+package hw3.submitted_code.syntaxtree;
 
 
 public class Test
@@ -100,7 +100,7 @@ public class Test
   }
   
   
-  
+
   private static class TestThread extends Thread
   {
     private String m_filename;
@@ -121,7 +121,7 @@ public class Test
       }
       catch (Exception e)
       {
-        System.out.println(Thread.currentThread().getName() + 
+        System.out.println(Thread.currentThread().getName() +
             " got exception: " + e);
 
       }

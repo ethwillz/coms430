@@ -1,4 +1,4 @@
-package hw3.components;
+package hw3.submitted_code.components;
 
 /**
  * Timer component.  Sending a SetTimeoutMessage to this component
@@ -13,14 +13,12 @@ public class TimerComponent extends Component
   @Override
   public void send(IMessage message)
   {
-    // TODO Auto-generated method stub
-    
+    message.dispatch(this);
   }
 
   @Override
   public void start()
   {
     // TODO Auto-generated method stub
-    
   }
 }

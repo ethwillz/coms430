@@ -1,4 +1,4 @@
-package hw3.components;
+package hw3.submitted_code.components;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,7 +14,7 @@ public class ClientComponent extends ThreadedComponent
   /**
    * Reference to database proxy. 
    */
-  private Component db;
+  private TimerComponent db;
   
   /**
    * Local cache of key/value pairs we've already looked up.
@@ -26,7 +26,7 @@ public class ClientComponent extends ThreadedComponent
    */
   private Map<Integer, Integer> pending;
   
-  public ClientComponent(Component db)
+  public ClientComponent(TimerComponent db)
   {
     this.db = db;
     cache = new ArrayList<Record>();
@@ -95,7 +95,7 @@ public class ClientComponent extends ThreadedComponent
     String value = getLocalValue(key);
     if (value == null)
     {
-      IMessage msg = new RequestMessage(this, key);
+      IMessage msg = new SetTimeoutMessage(this, key, 500);
       int id = msg.getId();
       pending.put(id, key);
       db.send(msg);

@@ -1,7 +1,7 @@
 package parallel_streams_presentation.code_examples;
 
-import java.util.ArrayList;
-import java.util.Random;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class runner {
     public static void main(String[] args) {
@@ -10,17 +10,30 @@ public class runner {
         String dept = "keep";
         char name = 'a';
         for(int i = 0; i < 26; i++){
-            for(int j = 0; j < 100000000; j++){
-                employees.add(new Employee(null, name));
+            for(int j = 0; j < 1000; j++){
+                employees.add(new Employee(dept, name));
                 name++;
-                if(r.nextInt() % 10 < 5) dept = random;
+                //if(r.nextInt() % 10 < 5) dept = random;
             }
             //begin++;
         }
 
-        long start = System.nanoTime();
-        (new CollectorsExample()).run(employees);
-        long deltaT = System.nanoTime() - start;
-        System.out.println(deltaT / 1000000000 + "." + Long.toString(deltaT % 1000000000).substring(0, 2) + " s\n");
+        Map<String, List<Employee>> g = employees.stream()
+            .parallel()
+            .collect(Collectors
+                    .groupingBy(Employee::getDepartment)
+            );
+
+        Map<String, List<Employee>> c = employees.stream()
+            .parallel()
+            .collect(Collectors
+                    .groupingByConcurrent(Employee::getDepartment)
+            );
+
+        ArrayList<Employee> listOne = (ArrayList<Employee>) g.entrySet().iterator().next().getValue();
+        ArrayList<Employee> listTwo = (ArrayList<Employee>) c.entrySet().iterator().next().getValue();
+        listOne.forEach(x -> {
+            if(!listTwo.contains(x)) System.out.println(x + " not present in the second map");
+        });
     }
 }

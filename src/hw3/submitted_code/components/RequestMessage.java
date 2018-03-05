@@ -1,4 +1,4 @@
-package hw3.components;
+package hw3.submitted_code.components;
 
 /**
  * Message type for a request from client.

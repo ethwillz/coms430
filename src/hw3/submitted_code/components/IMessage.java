@@ -1,4 +1,4 @@
-package hw3.components;
+package hw3.submitted_code.components;
 
 /**
  * Minimal interface for messages between Component objects.

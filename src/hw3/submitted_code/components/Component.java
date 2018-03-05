@@ -1,4 +1,7 @@
-package hw3.components;
+package hw3.submitted_code.components;
+
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Base component type for an actor-style message-passing
@@ -73,12 +76,12 @@ public abstract class Component
 
   public void handleTimeout(TimeoutMessage msg)
   {
-    handleDefault(msg);
+    System.out.println("Request for ID " + msg.getCorrelationId() + " timed out");
   }
   
-  public void handleSetTimeout(SetTimeoutMessage msg)
-  {
-    handleDefault(msg);
+  public void handleSetTimeout(SetTimeoutMessage msg) {
+     Runnable r = () -> this.send(new TimeoutMessage(msg.getCorrelationId(), this));
+     new ScheduledThreadPoolExecutor(1).schedule(r, msg.getTimeout(), TimeUnit.MILLISECONDS);
   }
 
 

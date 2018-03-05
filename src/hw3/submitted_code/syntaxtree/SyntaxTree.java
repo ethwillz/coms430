@@ -1,4 +1,4 @@
-package hw3.syntaxtree;
+package hw3.submitted_code.syntaxtree;
 
 /**
  * Class representing an abstract syntax tree resulting

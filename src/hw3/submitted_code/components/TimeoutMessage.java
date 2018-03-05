@@ -1,4 +1,4 @@
-package hw3.components;
+package hw3.submitted_code.components;
 
 /**
  * Message used by timer component to indicate to a caller that

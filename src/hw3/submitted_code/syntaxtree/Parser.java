@@ -1,4 +1,4 @@
-package hw3.syntaxtree;
+package hw3.submitted_code.syntaxtree;
 
 /**
  * Class representing an instance of a source file parser.
@@ -16,16 +16,11 @@ public class Parser
    * Parse the source file.  Takes a long time, involves
    * lots of I/O, etc.
    */
-  public SyntaxTree parse()
-  {
-    System.out.println(Thread.currentThread().getName() + 
-        " parsing file: " +  m_filename); 
-    try
-    {
+  public SyntaxTree parse() {
+    System.out.println(Thread.currentThread().getName() + " parsing file: " + m_filename);
+    try {
       Thread.sleep(5000);
-    }
-    catch (InterruptedException ignore) 
-    {
+    } catch (InterruptedException ignore) {
     }
     return new SyntaxTree(m_filename);
   }

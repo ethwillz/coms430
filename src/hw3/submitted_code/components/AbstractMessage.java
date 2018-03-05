@@ -1,4 +1,4 @@
-package hw3.components;
+package hw3.submitted_code.components;
 
 import java.util.concurrent.atomic.AtomicInteger;
 

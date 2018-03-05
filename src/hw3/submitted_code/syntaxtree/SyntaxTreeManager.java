@@ -1,8 +1,10 @@
-package hw3.syntaxtree;
+package hw3.submitted_code.syntaxtree;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
 
 /**
  * Singleton class for managing the abstract syntax trees obtained
@@ -18,7 +20,7 @@ public class SyntaxTreeManager
   /**
    * The actual cache of syntax trees
    */
-  private final Map<String, SyntaxTreeHolder> m_cache = new HashMap<String, SyntaxTreeHolder>();
+  private final ConcurrentMap<String, FutureTask<SyntaxTree>> m_cache = new ConcurrentHashMap<>();
   
   /**
    * Return the syntax tree for the given source file, parsing
@@ -27,36 +29,10 @@ public class SyntaxTreeManager
    * @param filename
    * @return
    */
-  public synchronized SyntaxTree getSyntaxTree(String filename)
-  {
-  	SyntaxTreeHolder holder = m_cache.get(filename);
-    if (holder == null)
-    {
-      Parser parser = new Parser(filename);
-      SyntaxTree ast = parser.parse();
-      holder = new SyntaxTreeHolder();
-      holder.set(ast);
-      m_cache.put(filename, holder);
-    }
-    return holder.get();
+  public SyntaxTree getSyntaxTree(String filename) throws ExecutionException, InterruptedException {
+      FutureTask<SyntaxTree> cachedTree = m_cache.computeIfAbsent(filename,
+              key -> new FutureTask<>(() -> new Parser(filename).parse()));
+      cachedTree.run();
+      return cachedTree.get();
   }
-
-  /**
-   * Helper class for storing completed syntax trees.  Doesn't
-   * do much at this point, but could be useful...
-   */
-	private static class SyntaxTreeHolder
-	{
-	  private SyntaxTree m_ast;
-	  
-	  public SyntaxTree get()
-	  {
-	  	return m_ast;
-	  }
-	  
-	  public void set(SyntaxTree ast)
-	  {
-	    m_ast = ast;
-	  }
-	}
 }

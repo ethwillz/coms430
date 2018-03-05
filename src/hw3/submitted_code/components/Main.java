@@ -1,4 +1,4 @@
-package hw3.components;
+package hw3.submitted_code.components;
 
 /**
  * Start up a system with input, client, proxy components.
@@ -9,14 +9,16 @@ public class Main
   public static void main(String[] args)
   {
     ProxyWorker worker = new ProxyWorker();
+    TimerComponent timer = new TimerComponent();
     Component proxy = new ProxyComponent(worker);
-    Component client = new ClientComponent(proxy);
+    Component client = new ClientComponent(timer);
     Component input = new InputComponent(client);
 
     proxy.start();
     worker.start();
     client.start();
     input.start();
+    timer.start();
   }
 
 }
