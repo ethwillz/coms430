@@ -14,7 +14,9 @@ public class ClientComponent extends ThreadedComponent
   /**
    * Reference to database proxy. 
    */
-  private TimerComponent db;
+  //private TimerComponent db;
+  private Component db;
+  private TimerComponent timer;
   
   /**
    * Local cache of key/value pairs we've already looked up.
@@ -26,11 +28,22 @@ public class ClientComponent extends ThreadedComponent
    */
   private Map<Integer, Integer> pending;
   
-  public ClientComponent(TimerComponent db)
+  public ClientComponent(Component db, TimerComponent timer)
   {
     this.db = db;
+    this.timer = timer;
     cache = new ArrayList<Record>();
     pending = new HashMap<Integer, Integer>();
+  }
+
+  public void handleTimeout(TimeoutMessage msg) {
+    synchronized(pending){ //in case both containsKey checks pass and 2 threads attempt to remove entry
+      int id = msg.getCorrelationId();
+      if(pending.containsKey(id)) {
+        System.out.println("Request for ID " + pending.remove(id) + " timed out");
+        System.out.println("Enter id number to look up, 'd' to display list, 'q' to quit");
+      }
+    }
   }
   
   public void handleText(TextMessage msg)
@@ -40,18 +53,20 @@ public class ClientComponent extends ThreadedComponent
   
   public void handleResult(ResultMessage msg)
   {
-    int id = msg.getCorrelationId();
-    Integer key = pending.remove(id);
-    if (key != null)
-    {
-      String result = getLocalValue(key);
-      if (result == null)
-      {
-        result = msg.getResult();
-        cache.add(new Record(key, result));
+    synchronized(pending){
+      int id = msg.getCorrelationId();
+      if(pending.containsKey(id)) {
+        Integer key = pending.remove(id);
+        if (key != null) {
+          String result = getLocalValue(key);
+          if (result == null) {
+            result = msg.getResult();
+            cache.add(new Record(key, result));
+          }
+          System.out.println("Value for id " + key + ": " + result);
+          System.out.println("Enter id number to look up, 'd' to display list, 'q' to quit");
+        }
       }
-      System.out.println("Value for id " + key + ": " + result);
-      System.out.println("Enter id number to look up, 'd' to display list, 'q' to quit");
     }
   }
 
@@ -95,10 +110,11 @@ public class ClientComponent extends ThreadedComponent
     String value = getLocalValue(key);
     if (value == null)
     {
-      IMessage msg = new SetTimeoutMessage(this, key, 500);
+      IMessage msg = new RequestMessage(this, key);
       int id = msg.getId();
       pending.put(id, key);
       db.send(msg);
+      timer.send(new SetTimeoutMessage(this, id, 100));
     }
     else
     {

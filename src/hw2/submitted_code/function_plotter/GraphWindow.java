@@ -1,3 +1,5 @@
+package hw2.submitted_code.function_plotter;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.AffineTransform;

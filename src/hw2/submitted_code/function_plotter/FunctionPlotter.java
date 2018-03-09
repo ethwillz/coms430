@@ -1,3 +1,5 @@
+package hw2.submitted_code.function_plotter;
+
 /**
  * A FunctionPlotter object plots the graph of a given
  * function on a GraphWindow window.  The function to be

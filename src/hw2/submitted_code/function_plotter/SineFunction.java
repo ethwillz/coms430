@@ -1,3 +1,5 @@
+package hw2.submitted_code.function_plotter;
+
 public class SineFunction implements SVFunction
 {
   private double amplitude;

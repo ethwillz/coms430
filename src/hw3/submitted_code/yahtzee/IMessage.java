@@ -1,4 +1,4 @@
-package hw3.yahtzee;
+package hw3.submitted_code.yahtzee;
 
 /**
  * Minimal interface for messages between Component objects.

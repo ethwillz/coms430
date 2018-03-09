@@ -1,4 +1,6 @@
-package hw3.yahtzee;
+package hw3.submitted_code.yahtzee;
+
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 /**
  * Message type used to request a message from the
@@ -11,12 +13,16 @@ public class SetTimeoutMessage extends AbstractMessage
 {
   private int originalId;
   private int timeout; // ms
+  private boolean isLeftBroadcast;
+  private ScheduledThreadPoolExecutor exec;
   
-  public SetTimeoutMessage(Component sender, int originalId, int timeout)
-  {
+  public SetTimeoutMessage(Component sender, int originalId, int timeout, boolean isLeftBroadcast,
+                           ScheduledThreadPoolExecutor exec) {
     super(sender);
     this.originalId = originalId;
     this.timeout = timeout;
+    this.isLeftBroadcast = isLeftBroadcast;
+    this.exec = exec;
   }
   
   @Override
@@ -24,7 +30,7 @@ public class SetTimeoutMessage extends AbstractMessage
   {
     receiver.handleSetTimeout(this);
   }
-  
+
   public int getOriginalId()
   {
     return originalId;
@@ -33,5 +39,11 @@ public class SetTimeoutMessage extends AbstractMessage
   public int getTimeout()
   {
     return timeout;
+  }
+
+  public boolean isLeftBroadcast() { return isLeftBroadcast; }
+
+  public ScheduledThreadPoolExecutor getExec() {
+    return exec;
   }
 }

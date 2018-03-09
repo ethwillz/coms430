@@ -1,3 +1,5 @@
+package hw2.submitted_code;
+
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
@@ -31,7 +33,6 @@ public class FileLogger implements Runnable
       //Synchronized on queue because if queue is modified during draining, inconsistent results can follow
       synchronized(queue){
         if(queue.drainTo(msgsToProcess) > 0){
-          //Schedules writes to file locked on the Logger instance to avoid threads attempting to open multiple streams
           backgroundExecutor.execute(() -> {
             try {
               OutputStream os = new FileOutputStream(filename, true);

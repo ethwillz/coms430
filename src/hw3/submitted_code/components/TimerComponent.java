@@ -1,5 +1,8 @@
 package hw3.submitted_code.components;
 
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+
 /**
  * Timer component.  Sending a SetTimeoutMessage to this component
  * will cause a TimeoutMessage to be sent to the caller after
@@ -16,9 +19,14 @@ public class TimerComponent extends Component
     message.dispatch(this);
   }
 
+  public void handleSetTimeout(SetTimeoutMessage msg){
+    Runnable r = () -> msg.getSender().send(new TimeoutMessage(msg.getOriginalId(), msg.getSender()));
+    new ScheduledThreadPoolExecutor(1).schedule(r, msg.getTimeout(), TimeUnit.MILLISECONDS);
+  }
+
   @Override
   public void start()
   {
-    // TODO Auto-generated method stub
+    // do nothing
   }
 }

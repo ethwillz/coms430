@@ -1,3 +1,5 @@
+package hw2.submitted_code;
+
 import java.util.NoSuchElementException;
 
 /**

@@ -1,3 +1,5 @@
+package hw2.submitted_code.function_plotter;
+
 import java.util.Scanner;
 
 /**

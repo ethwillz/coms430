@@ -1,4 +1,4 @@
-package hw3.yahtzee;
+package hw3.submitted_code.yahtzee;
 
 /**
  * Message used by timer component to indicate to a caller that
@@ -6,9 +6,12 @@ package hw3.yahtzee;
  */
 public class TimeoutMessage extends AbstractMessage
 {
-  public TimeoutMessage(int correlationId, Component sender)
+  private boolean isLeftBroadcast;
+
+  public TimeoutMessage(int correlationId, Component sender, boolean isLeftBroadcast)
   {
     super(correlationId, sender);
+    this.isLeftBroadcast = isLeftBroadcast;
   }
   
   @Override
@@ -16,4 +19,7 @@ public class TimeoutMessage extends AbstractMessage
   {
     receiver.handleTimeout(this);
   }
+
+  public boolean isLeftBroadcast() { return isLeftBroadcast; }
+
 }

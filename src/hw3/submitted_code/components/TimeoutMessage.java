@@ -12,8 +12,5 @@ public class TimeoutMessage extends AbstractMessage
   }
   
   @Override
-  public void dispatch(Component receiver)
-  {
-    receiver.handleTimeout(this);
-  }
+  public void dispatch(Component receiver) { receiver.handleTimeout(this); }
 }

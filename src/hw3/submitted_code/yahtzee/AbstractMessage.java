@@ -1,4 +1,4 @@
-package hw3.yahtzee;
+package hw3.submitted_code.yahtzee;
 
 import java.util.concurrent.atomic.AtomicInteger;
 

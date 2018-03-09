@@ -1,4 +1,4 @@
-package hw3.yahtzee;
+package hw3.submitted_code.yahtzee;
 
 /**
  * Base component type for an actor-style message-passing
@@ -59,4 +59,8 @@ public abstract class Component
   {
     handleDefault(msg);
   }
+
+  public void handleMessage(Message msg) { handleDefault(msg); }
+
+  public void handlePositionMessage(PositionMessage msg) { handleDefault(msg); }
 }

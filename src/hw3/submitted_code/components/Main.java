@@ -11,14 +11,13 @@ public class Main
     ProxyWorker worker = new ProxyWorker();
     TimerComponent timer = new TimerComponent();
     Component proxy = new ProxyComponent(worker);
-    Component client = new ClientComponent(timer);
+    Component client = new ClientComponent(proxy, timer);
     Component input = new InputComponent(client);
 
     proxy.start();
     worker.start();
     client.start();
     input.start();
-    timer.start();
   }
 
 }

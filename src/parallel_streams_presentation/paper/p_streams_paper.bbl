@@ -34,6 +34,24 @@
     \field{year}{2017}
   \endentry
 
+  \entry{collectors_doc}{online}{}
+    \list{organization}{1}{%
+      {Oracle}%
+    }
+    \field{labeltitlesource}{title}
+    \field{sortinit}{C}
+    \field{sortinithash}{C}
+    \field{subtitle}{Java Platform SE 8}
+    \field{titleaddon}{Oracle Help Center}
+    \field{title}{Collectors}
+    \verb{url}
+    \verb https://docs.oracle.com/javase/8/docs/api/java/util/stream/Collectors
+    \verb .html
+    \endverb
+    \field{version}{8}
+    \field{year}{2017}
+  \endentry
+
   \entry{ibm_streams}{online}{}
     \name{author}{1}{}{%
       {{hash=GB}{%
@@ -60,6 +78,24 @@
     \field{version}{8}
     \field{month}{02}
     \field{year}{2016}
+  \endentry
+
+  \entry{rapid7_overview}{online}{}
+    \list{organization}{1}{%
+      {Rapid7}%
+    }
+    \field{labeltitlesource}{title}
+    \field{sortinit}{J}
+    \field{sortinithash}{J}
+    \field{titleaddon}{Rapid7Blog}
+    \field{title}{Java 8: A quick introduction to Parallelism and the
+  Spliterator}
+    \verb{url}
+    \verb https://blog.rapid7.com/2015/10/28/java-8-introduction-to-parallelism
+    \verb -and-spliterator/
+    \endverb
+    \field{month}{08}
+    \field{year}{2015}
   \endentry
 
   \entry{expression_state}{online}{}
@@ -170,6 +206,47 @@
     \verb{url}
     \verb https://docs.oracle.com/javase/tutorial/collections/streams/paralleli
     \verb sm.html
+    \endverb
+    \field{version}{8}
+    \field{year}{2017}
+  \endentry
+
+  \entry{benchmark_software}{online}{}
+    \name{author}{1}{}{%
+      {{hash=PN}{%
+         family={Parlog},
+         familyi={P\bibinitperiod},
+         given={Nicolai},
+         giveni={N\bibinitperiod},
+      }}%
+    }
+    \list{organization}{1}{%
+      {CodeFX}%
+    }
+    \strng{namehash}{PN1}
+    \strng{fullhash}{PN1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{P}
+    \field{sortinithash}{P}
+    \field{title}{Java 8 Stream Performance Benchmark Tool}
+    \verb{url}
+    \verb https://github.com/CodeFX-org/lab-java8streamperformancebenchmark
+    \endverb
+  \endentry
+
+  \entry{split_doc}{online}{}
+    \list{organization}{1}{%
+      {Oracle}%
+    }
+    \field{labeltitlesource}{title}
+    \field{sortinit}{S}
+    \field{sortinithash}{S}
+    \field{subtitle}{Java SE 8}
+    \field{titleaddon}{Oracle Help Center}
+    \field{title}{Spliterator}
+    \verb{url}
+    \verb https://docs.oracle.com/javase/8/docs/api/java/util/Spliterator.html
     \endverb
     \field{version}{8}
     \field{year}{2017}

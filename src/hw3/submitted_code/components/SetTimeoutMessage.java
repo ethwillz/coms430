@@ -1,5 +1,8 @@
 package hw3.submitted_code.components;
 
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+
 /**
  * Message type used to request a message from the
  * timer component.  The 'originalId' will be used
@@ -7,11 +10,10 @@ package hw3.submitted_code.components;
  * sender can use this message to refer to a different
  * message.
  */
-public class SetTimeoutMessage extends AbstractMessage
-{
+public class SetTimeoutMessage extends AbstractMessage {
   private int originalId;
   private int timeout; // ms
-  
+
   public SetTimeoutMessage(Component sender, int originalId, int timeout)
   {
     super(sender);
@@ -20,10 +22,7 @@ public class SetTimeoutMessage extends AbstractMessage
   }
   
   @Override
-  public void dispatch(Component receiver)
-  {
-    receiver.handleSetTimeout(this);
-  }
+  public void dispatch(Component receiver) { receiver.handleSetTimeout(this); }
   
   public int getOriginalId()
   {

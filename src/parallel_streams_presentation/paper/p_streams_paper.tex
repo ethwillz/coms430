@@ -70,7 +70,7 @@ Some of the vocabulary in the paper may be unfamiliar to those with a knowledge 
 \end{itemize}
 
 \section{Introduction}
-Parallel streams were introduced into Java 8 alongside serial streams so that developers could utilize concurrency in order to more efficiently utilize modern multiprocessor design \autocite{ibm_streams}. Making a serial stream into a parallel stream is as easy as calling \verb|parallel()| after \verb|stream()|. In order for the \verb|parallel()| method to be applicable on the stream, the source \verb|Collection| must have an implementation of a \verb|Spliterator| \autocite{ibm_streams}. A \verb|Spliterator| object breaks up the original stream into parts which are each handled by a new thread from the JVM's common pool, illustrated in Figure \ref{fig:overview}. The substreams are then assembled and computed based on the bahavior of the terminal operation.
+Parallel streams were introduced into Java 8 alongside serial streams so that developers could utilize concurrency in order to more efficiently utilize modern multiprocessor design \autocite{rapid7_overview}. Making a serial stream into a parallel stream is as easy as calling \verb|parallel()| after \verb|stream()|. In order for the \verb|parallel()| method to be applicable on the stream, the source \verb|Collection| must have an implementation of a \verb|Spliterator| \autocite{ibm_streams}. A \verb|Spliterator| object breaks up the original stream into parts which are each handled by a new thread from the JVM's common pool, illustrated in Figure \ref{fig:overview}. The substreams are then assembled and computed based on the bahavior of the terminal operation.
 
 \begin{figure}[H]
 \centering
@@ -80,12 +80,12 @@ Parallel streams were introduced into Java 8 alongside serial streams so that de
 \label{fig:overview}
 \end{figure}
 
-There are several terminal operations for a parallel stream, but the \verb|collect()| method is the most reliable form of reduction. The method uses a \verb|Collector| to reduce the stream, an object that defines how input elements should be added to a given data structure. This document will focus on the \verb|Collector|'s functionality and implementation, finishing with an explanation of special use cases for parallel streams.
+The \verb|collect()| method is the best strategy for reduction of a parallel stream because ordering of elements isn't guaranteed \autocite{ibm_streams}. The method uses a \verb|Collector| to reduce the stream, an object that defines how input elements should be added to a given data structure. This document will focus on the \verb|Collector|'s functionality and implementation, finishing with an explanation of special use cases for parallel streams.
 
 Despite parallel streams being introduced into Java to simplify concurrency, developers can easily corrupt data and cause system bugs. All possible bugs in streams derive from developers not following standard concurrency practices such as using long-running or blocking operations in streams. Additionally, considerations have to be taken with streams specifically to avoid interference with the source and using stateful expressions.
 
 \section{Spliterator}
-The \verb|Spliterator| is the backbone of parallel streams, allowing the program to split a collection apart (illustrated in Figure \ref{fig:split}) and iterate through it. If a class extending a \verb|Collection| does not have a \verb|spliterator()| method returning a \verb|Spliterator| object, then Java is not able to process the collection with a parallel stream at all. Figure \ref{fig:split} shows how an instance may behave when it splits itself. It is worth noting that the splitting doesn't actually break up the collection. \verb|Spliterator|s share the collection and simply keep track of what element it is currently iterating on (index) and one more than the last element it is allowed to execute with (fence).
+The \verb|Spliterator| is the backbone of parallel streams, allowing the program to split a collection apart (illustrated in Figure \ref{fig:split}) and iterate through it \autocite{rapid7_overview}. If a class extending a \verb|Collection| does not have a \verb|spliterator()| method returning a \verb|Spliterator| object, then Java is not able to process the collection with a parallel stream at all. Figure \ref{fig:split} shows how an instance may behave when it splits itself. It is worth noting that the splitting doesn't actually break up the collection. \verb|Spliterator|s share the collection and simply keep track of what element it is currently iterating on (index) and one more than the last element it is allowed to execute with (fence).
 
 \begin{figure}[H]
 \centering
@@ -96,7 +96,7 @@ The \verb|Spliterator| is the backbone of parallel streams, allowing the program
 \end{figure}
 
 \subsection{Implementation} 
-A \verb|Spliterator| must be able to traverse and split the portion of the stream it represents. \verb|tryEachRemaining()| and \verb|tryNext()| are the two methods which dictate how traversal is handled for the collection. \verb|tryEachRemaining()| in Figure \ref{fig:forEachRemaining} takes a Consumer object which is the operation to be executed on each element of the collection. The example simply iterates through each element and uses it as a parameter to the \verb|accept()| method of the \verb|Consumer| object. \verb|tryNext()| in Figure \ref{fig:tryAdvance} is similar although the operation is only attempted on element at the current cursor position. If that cursor position is past the fence of the Spliterator, then the method returns false, otherwise it returns true.
+A \verb|Spliterator| must be able to traverse and split the portion of the stream it represents. \verb|tryEachRemaining()| and \verb|tryNext()| are the two methods which dictate how traversal is handled for the collection \autocite{split_doc}. \verb|tryEachRemaining()| in Figure \ref{fig:forEachRemaining} takes a Consumer object which is the operation to be executed on each element of the collection. The example simply iterates through each element and uses it as a parameter to the \verb|accept()| method of the \verb|Consumer| object. \verb|tryNext()| in Figure \ref{fig:tryAdvance} is similar although the operation is only attempted on element at the current cursor position. If that cursor position is past the fence of the Spliterator, then the method returns false, otherwise it returns true.
 
 \begin{figure}[H]
 \centering
@@ -125,7 +125,7 @@ public boolean tryAdvance(Consumer<? super E> action) {
 \label{fig:tryAdvance}
 \end{figure}
 
-A \verb|Spliterator|'s primary functionality is encapsulated within the \verb|trySplit()| method in Figure \ref{fig:trySplit}. This method is called when the JVM wants to break the source collection in order to start processing the stream on another thread and if implemented incorrectly can be a subtle but important error in an application \autocite{}. The example implementation simply finds the midpoint and either returns a new \verb|Spliterator| from the cursor to the midpoint and the current instance of \verb|Spliterator| now covers mid to the fence. The example \verb|trySplit()| method is the code behind the split behavior illustrated in Figure \ref{fig:split}.
+A \verb|Spliterator|'s primary functionality is encapsulated within the \verb|trySplit()| method in Figure \ref{fig:trySplit}. This method is called when the JVM wants to break the source collection in order to start processing the stream on another thread and if implemented incorrectly can be a subtle but important error in an application \autocite{split_doc}. The example implementation simply finds the midpoint and either returns a new \verb|Spliterator| from the cursor to the midpoint and the current instance of \verb|Spliterator| now covers mid to the fence. The example \verb|trySplit()| method is the code behind the split behavior illustrated in Figure \ref{fig:split}.
 
 \begin{figure}[H]
 \centering
@@ -141,7 +141,7 @@ public Spliterator<E> trySplit() {
 \end{figure}
 
 \section{Collector}
-A \verb|Collector| object defines a mutable reduction operation for a group of input elements. In other words, it provides information on how to instantiate a data structure and perform several operations on it. Its functionality is encompassed in 4 methods (illustrated in Figure \ref{fig:collector}):
+A \verb|Collector| object defines a mutable reduction operation for a group of input elements \autocite{collector_doc}. In other words, it provides information on how to instantiate a data structure and perform several operations on it. Its functionality is encompassed in 4 methods (illustrated in Figure \ref{fig:collector}):
 
 \begin{itemize}
 \item \verb|supplier()| provides information on how to construct a new instance of the desired data structure
@@ -158,7 +158,7 @@ A \verb|Collector| object defines a mutable reduction operation for a group of i
 \label{fig:collector}
 \end{figure}
 
-\verb|Collector| objects are used during a reduction operation to join substreams together in the form of the data structure defined by the instance. Java has a static class called \verb|Collectors| which provide basic reduction instances via method calls. For example \verb|Collectors.toMap()| returns a \verb|Collector| instance which reduces the stream to a \verb|Map|. 
+\verb|Collector| objects are used during a reduction operation to join substreams together in the form of the data structure defined by the instance. Java has a static class called \verb|Collectors| which provide basic reduction instances via method calls. For example \verb|Collectors.toMap()| returns a \verb|Collector| instance which reduces the stream to a \verb|Map| \autocite{collectors_doc}. 
 
 \subsection{Implementation}
 
@@ -224,7 +224,7 @@ public Function<ImmutableSet.Builder<T>, ImmutableSet<T>> finisher() {
 \end{figure}
 
 \subsection{Special Uses for Parallelism}
-Although the \verb|collect()| method can be used on both serial and parallel streams, Java also includes special \verb|Collector| instances for better parallel performance. For example, Figure \ref{fig:employee_collection} has the same collect operation on a parallel stream, one reduces with the \verb|groupingBy()| method and the other reduces with the \verb|groupingByConcurrent()| method. Even though both are parallel, the second example runs significantly faster because the reduction can be parallelized by using a \verb|ConcurrentMap|. The first example processes each element in parallel, but the reduction is to a non-thread-safe data structure, limiting the potential benefits of parallelism.
+Although the \verb|collect()| method can be used on both serial and parallel streams, Java also includes special \verb|Collector| instances for parallel performance. For example, Figure \ref{fig:employee_collection} shows two parallel streams where the first one utilizes the \verb|groupingBy()| method and the other one uses \verb|groupingByConcurrent()|. Although Java's official documentation says the second should be more performant \autocite{parallelism_doc}, in my benchmarks that I ran I got a significant slowdown, .736 ms/op vs 2.533 ms/op \autocite{benchmark_software}. Additional research as to why this is the case yielded no results and as such the author suggests every developer should benchmark these operations themselves to validate performance.
 
 \begin{figure}[H]
 \centering
@@ -256,7 +256,7 @@ Parallel streams were introduced to make implementing parallelism in a Java appl
 \subsection{Long-Running/Blocking Operations}
 Using long-running or blocking operations in a stream will degrade performance drastically, a result of how streams implement threading. The JVM begins by processing on the calling thread and as more subtasks are broken off, the JVM gets threads from \verb|ForkJoinPool.common()|, which is a thread pool used in the background of the whole application \autocite{dzone_dangers}. 
 
-With the JVM's use of a common thread pool, a long-running operation in a parallel stream as shown in the first example of Figure \ref{fig:network_op} will degrade performance drastically. Performance will be such that the stream will benefit very little from parallelization and may even be less performant than a serial stream. Each thread in the pool will be consumed executing that operation and subsequently all other JVM tasks using the common thread pool have to wait. 
+With the JVM's use of a common thread pool, a long-running operation in a parallel stream as shown in the first example of Figure \ref{fig:network_op} will degrade performance drastically. Benchmarking puts both of these operations at the same runtime, but the parallel version can degrade performance of other parallel streams that are being processed in the application \autocite{benchmark_software}.
 
 In a situation where several streams are all attempting to process in parallel, each stream's performance will suffer even if it should have no problem. Java does allow a custom \verb|ThreadPool| like in example 2 of Figure \ref{fig:network_op} which can help by using threads created outside the common pool \autocite{dzone_fjp}. Unfortunately, since the issue described above results from a bad concurrency practice, more threads won't provide any significant performance enhancement.
 
@@ -276,7 +276,15 @@ Optional<String> result = customPool.submit(() -> collection.stream().parallel()
 \end{figure}
 
 \subsection{Interference}
-Since streams don't contain any of the elements of the collection, instead storing references, if the source is modified then the reference is invalidated \autocite{ibm_streams}. Editing the source of the stream in an intermediate operation is called \textit{interference} and will throw a \verb|ConcurrentModificationException| \autocite{parallelism_doc}. The stream in figure \ref{fig:interference} attempts to add each element to the collection again using the \verb|map()| method. Since it attempts to modify the source before the stream has serialized, this operation will throw an exception.
+Since streams don't contain any of the elements of the collection, instead iterating via each \verb|Spliterator|'s index, adding to the collection can cause problems and is called \textit{interference}. Figure \ref{fig:interference} shows why this will throw a \verb|ConcurrentModificationException| \autocite{parallelism_doc}; to start, the \verb|Spliterator| starts processing elements until the index is 3. A new item is added to the beginning of the collection and now the index suggests we re-process that element while never touching the newly added element. Writing interfering code dangerous because is easy to write and Figure \ref{fig:interference} shows an extremely simple example where each element is inserted into the collection again.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=13cm]{../images/interference.png}
+\caption{Why interference is a problem}
+\source{Ethan Williams}
+\label{fig:interference_pic}
+\end{figure}
 
 \begin{figure}[H]
 \centering

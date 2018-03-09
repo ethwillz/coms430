@@ -1,3 +1,5 @@
+package hw2.submitted_code.function_plotter;
+
 /**
  * Class representing a quadratic function.
  */
