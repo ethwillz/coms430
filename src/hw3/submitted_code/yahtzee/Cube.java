@@ -24,8 +24,8 @@ public class Cube extends ThreadedComponent
   private Component left, right;
   private int leftId, rightId;
   private int data;
-  ScheduledThreadPoolExecutor exec;
-  STATE state;
+  private ScheduledThreadPoolExecutor exec;
+  private STATE state;
 
   public Cube(TimerComponent timer)
   {
@@ -117,48 +117,49 @@ public class Cube extends ThreadedComponent
   }
 
   public void handlePositionMessage(PositionMessage msg){
-    if(state == STATE.STARTING) {
-      if (msg.getPos() == 2) {
+    if (msg.getPos() == 2) {
+      if(state == STATE.STARTING) {
         Universe.updateDisplay(this, "T");
         right.send(new PositionMessage(this, 3, null));
-      }
-      if (msg.getPos() == 3) {
-        Universe.updateDisplay(this, "A");
-        right.send(new PositionMessage(this, 4, null));
-      }
-      if (msg.getPos() == 4) {
-        Universe.updateDisplay(this, "R");
-        right.send(new PositionMessage(this, 5, null));
-      }
-      if (msg.getPos() == 5) {
-        Universe.updateDisplay(this, "T");
-        state = STATE.GENERATING;
-        left.send(new PositionMessage(this, -1, null));
-      }
-      if (msg.getPos() == -1) {
-        state = STATE.GENERATING;
-        left.send(new PositionMessage(this, -1, null));
-      }
-    }
-    if(state == STATE.SCORING){
-      if (msg.getPos() == 2) {
+      } else {
         Universe.updateDisplay(this, "O");
         right.send(new PositionMessage(this, 3, msg.getData() + data));
       }
-      if (msg.getPos() == 3) {
+    }
+    if (msg.getPos() == 3) {
+      if(state == STATE.STARTING) {
+        Universe.updateDisplay(this, "A");
+        right.send(new PositionMessage(this, 4, null));
+      } else {
         Universe.updateDisplay(this, "N");
         right.send(new PositionMessage(this, 4, msg.getData() + data));
       }
-      if (msg.getPos() == 4) {
+    }
+    if (msg.getPos() == 4) {
+      if(state == STATE.STARTING) {
+        Universe.updateDisplay(this, "R");
+        right.send(new PositionMessage(this, 5, null));
+      } else {
         Universe.updateDisplay(this, "E");
         right.send(new PositionMessage(this, 5, msg.getData() + data));
       }
-      if (msg.getPos() == 5) {
+    }
+    if (msg.getPos() == 5) {
+      if(state == STATE.STARTING) {
+        Universe.updateDisplay(this, "T");
+        state = STATE.GENERATING;
+        left.send(new PositionMessage(this, -1, null));
+      } else {
         Universe.updateDisplay(this, "" + (msg.getData() + data));
         state = STATE.DONE;
         left.send(new PositionMessage(this, -1, msg.getData() + data));
       }
-      if (msg.getPos() == -1) {
+    }
+    if (msg.getPos() == -1) {
+      if(state == STATE.STARTING) {
+        state = STATE.GENERATING;
+        left.send(new PositionMessage(this, -1, null));
+      } else {
         state = STATE.DONE;
         left.send(new PositionMessage(this, -1, null));
       }
