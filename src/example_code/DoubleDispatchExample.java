@@ -148,7 +148,7 @@ class Message1 implements IMessage
 
   public String toString()
   {
-    return "Message 1";
+    return "CubeMessage 1";
   }  
 }
 
@@ -162,6 +162,6 @@ class Message2 implements IMessage
 
   public String toString()
   {
-    return "Message 2";
+    return "CubeMessage 2";
   }
 }

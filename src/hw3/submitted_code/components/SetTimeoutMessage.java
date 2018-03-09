@@ -4,7 +4,7 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Message type used to request a message from the
+ * CubeMessage type used to request a message from the
  * timer component.  The 'originalId' will be used
  * as the correlation id in the TimeoutMessage, so that the
  * sender can use this message to refer to a different
@@ -13,12 +13,14 @@ import java.util.concurrent.TimeUnit;
 public class SetTimeoutMessage extends AbstractMessage {
   private int originalId;
   private int timeout; // ms
+  private ScheduledThreadPoolExecutor exec;
 
-  public SetTimeoutMessage(Component sender, int originalId, int timeout)
+  public SetTimeoutMessage(Component sender, int originalId, int timeout, ScheduledThreadPoolExecutor exec)
   {
     super(sender);
     this.originalId = originalId;
     this.timeout = timeout;
+    this.exec = exec;
   }
   
   @Override
@@ -33,4 +35,6 @@ public class SetTimeoutMessage extends AbstractMessage {
   {
     return timeout;
   }
+
+  public ScheduledThreadPoolExecutor getExec() { return exec; }
 }

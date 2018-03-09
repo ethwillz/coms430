@@ -1,6 +1,5 @@
 package hw3.submitted_code.components;
 
-import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -12,7 +11,6 @@ import java.util.concurrent.TimeUnit;
  */
 public class TimerComponent extends Component
 {
-
   @Override
   public void send(IMessage message)
   {
@@ -21,7 +19,7 @@ public class TimerComponent extends Component
 
   public void handleSetTimeout(SetTimeoutMessage msg){
     Runnable r = () -> msg.getSender().send(new TimeoutMessage(msg.getOriginalId(), msg.getSender()));
-    new ScheduledThreadPoolExecutor(1).schedule(r, msg.getTimeout(), TimeUnit.MILLISECONDS);
+    msg.getExec().schedule(r, msg.getTimeout(), TimeUnit.MILLISECONDS);
   }
 
   @Override

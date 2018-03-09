@@ -3,7 +3,7 @@ package hw3.submitted_code.yahtzee;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 /**
- * Message type used to request a message from the
+ * CubeMessage type used to request a message from the
  * timer component.  The 'originalId' will be used
  * as the correlation id in the TimeoutMessage, so that the
  * sender can use this message to refer to a different

@@ -3,6 +3,7 @@ package hw3.submitted_code.components;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 /**
  * Client component receives text messages from an input
@@ -14,9 +15,9 @@ public class ClientComponent extends ThreadedComponent
   /**
    * Reference to database proxy. 
    */
-  //private TimerComponent db;
   private Component db;
   private TimerComponent timer;
+  private ScheduledThreadPoolExecutor exec;
   
   /**
    * Local cache of key/value pairs we've already looked up.
@@ -32,8 +33,9 @@ public class ClientComponent extends ThreadedComponent
   {
     this.db = db;
     this.timer = timer;
-    cache = new ArrayList<Record>();
-    pending = new HashMap<Integer, Integer>();
+    cache = new ArrayList<>();
+    pending = new HashMap<>();
+    exec = new ScheduledThreadPoolExecutor(1);
   }
 
   public void handleTimeout(TimeoutMessage msg) {
@@ -114,7 +116,7 @@ public class ClientComponent extends ThreadedComponent
       int id = msg.getId();
       pending.put(id, key);
       db.send(msg);
-      timer.send(new SetTimeoutMessage(this, id, 100));
+      timer.send(new SetTimeoutMessage(this, id, 100, exec));
     }
     else
     {

@@ -1,7 +1,7 @@
 package hw3.submitted_code.components;
 
 /**
- * Message used by timer component to indicate to a caller that
+ * CubeMessage used by timer component to indicate to a caller that
  * the requested timeout has expired.
  */
 public class TimeoutMessage extends AbstractMessage

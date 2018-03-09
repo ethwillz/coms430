@@ -1,7 +1,7 @@
 package hw3.submitted_code.components;
 
 /**
- * Message type for a request from client.
+ * CubeMessage type for a request from client.
  */
 public class RequestMessage extends AbstractMessage
 {

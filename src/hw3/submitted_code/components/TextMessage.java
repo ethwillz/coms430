@@ -1,7 +1,7 @@
 package hw3.submitted_code.components;
 
 /**
- * Message containing a string of text.
+ * CubeMessage containing a string of text.
  */
 public class TextMessage extends AbstractMessage
 {

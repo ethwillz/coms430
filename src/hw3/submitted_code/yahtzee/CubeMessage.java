@@ -1,17 +1,15 @@
 package hw3.submitted_code.yahtzee;
 
-public class Message extends AbstractMessage {
+public class CubeMessage extends AbstractMessage {
 
     private boolean isLeftBroadcast;
 
-    public Message(Component sender, boolean isLeftBroadcast){
+    public CubeMessage(Component sender, boolean isLeftBroadcast){
         super(sender);
         this.isLeftBroadcast = isLeftBroadcast;
     }
 
-    public boolean isLeftBroadcast(){
-        return isLeftBroadcast;
-    }
+    public boolean isLeftBroadcast(){ return isLeftBroadcast; }
 
     @Override
     public Component getSender() {
@@ -20,6 +18,6 @@ public class Message extends AbstractMessage {
 
     @Override
     public void dispatch(Component receiver) {
-        receiver.handleMessage(this);
+        receiver.handleCubeMessage(this);
     }
 }

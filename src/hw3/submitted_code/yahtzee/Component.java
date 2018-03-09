@@ -60,7 +60,7 @@ public abstract class Component
     handleDefault(msg);
   }
 
-  public void handleMessage(Message msg) { handleDefault(msg); }
+  public void handleCubeMessage(CubeMessage msg) { handleDefault(msg); }
 
   public void handlePositionMessage(PositionMessage msg) { handleDefault(msg); }
 }
