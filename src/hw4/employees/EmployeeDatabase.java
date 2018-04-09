@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.ToIntFunction;
@@ -173,31 +174,30 @@ public class EmployeeDatabase
   
   public static class PositionLister implements Consumer<Employee>
   {
-    Map<String, List<String>> map = new HashMap<>();
+    Map<String, List<String>> map = new ConcurrentHashMap<>();
 
     public Map<String, List<String>> getMap() { return map; }
 
     public void accept(Employee e)
     {
-      if (map.containsKey(e.getPosition())){
-        List<String> existingPlusNew = map.get(e.getPosition());
-        existingPlusNew.add(e.getLastName());
-        map.put(e.getPosition(), existingPlusNew);
+      if(map.computeIfAbsent(e.getPosition(), (s) -> new ArrayList<String>(){{ add(e.getLastName()); }}) == null){
+        map.computeIfPresent(e.getPosition(), (s, l) -> {
+          l.add(e.getLastName());
+          return l;
+        });
       }
-      else map.put(e.getPosition(), new ArrayList<String>(){{ add(e.getLastName()); }});
     }
 
     public void combine(PositionLister other)
     {
-      for(String position: map.keySet()){
-        List<String> otherLastNames = other.getMap().get(position);
-        List<String> thisLastNames = map.get(position);
-        map.put(position,
-                Stream.of(otherLastNames, thisLastNames)
-                .flatMap(Collection::stream)
-                        .sorted()
-                        .collect(Collectors.toList()));
-      }
+      other.getMap().forEach((s, l) -> {
+        if(map.computeIfAbsent(s, (x) -> l) == null){
+          map.computeIfPresent(s, (k, v) -> Stream.of(l, v)
+                  .flatMap(Collection::stream)
+                  .sorted()
+                  .collect(Collectors.toList()));
+        }
+      });
     }
   }
   
